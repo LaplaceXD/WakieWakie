@@ -1,0 +1,9 @@
+# Image Files
+public/*
+src/assets/*
+
+# Generated Files
+.husky/*
+LICENSE
+yarn.lock
+.gitignore

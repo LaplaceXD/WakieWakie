@@ -1,0 +1,7 @@
+{
+  "installCommand": "yarn install",
+  "buildCommand": "cd client && yarn build",
+  "outputDirectory": "client/dist",
+  "regions": ["sin1"],
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
