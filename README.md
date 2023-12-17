@@ -11,6 +11,7 @@ A dating app that aims to match people nearby based on the time they wake up. Th
 1. Clone this repository.
 2. Go into the directory using `cd WakieWakie`.
 3. Install the necessary dependencies using `yarn`.
-4. Run the app locally using `yarn dev`.
+4. Run the migrations on the database using `yarn db:migrate`.
+5. Run the app locally using `yarn dev`.
    > This runs the client at `http://localhost:5173`, and the server at `http:localhost:3000`.
-5. Open the web app on your desired browser usign the URL above.
+6. Open the web app on your desired browser using the URL above.
