@@ -1,29 +1,32 @@
-import { serve } from "@hono/node-server";
-import { Hono } from "hono";
-import { compress } from "hono/compress";
-import { cors } from "hono/cors";
-import { logger } from "hono/logger";
-import { secureHeaders } from "hono/secure-headers";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
-const app = new Hono().basePath("api/v1");
+import cors from "cors";
+import express from "express";
+import { createServer } from "http";
 
-app.use("*", cors());
-app.use("*", logger());
-app.use("*", compress());
-app.use("*", secureHeaders());
+import { resolvers } from "./modules/auth/auth.resolvers";
+import { typeDefs } from "./modules/auth/auth.schema";
 
-app.get("/ping", async c => {
-  return c.json({ message: "PONG!" });
+const app = express();
+const httpServer = createServer(app);
+
+const server = new ApolloServer({
+  typeDefs: [typeDefs],
+  resolvers: [resolvers],
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-app.get("/health", async c => {
-  return c.json({ ok: true });
-});
+await server.start();
 
-serve(app, ({ address, port }) => {
-  const isLocalHost = "0.0.0.0" === address;
-  const name = isLocalHost ? "http" : "https";
-  const addressName = isLocalHost ? "localhost" : address;
+app.use(
+  "/graphql",
+  cors({ origin: ["http://localhost:5173"], credentials: true }),
+  express.json(),
+  expressMiddleware(server),
+);
 
-  console.log(`Server running at ${name}://${addressName}:${port}`);
+httpServer.listen(4000, () => {
+  console.log(`🚀  Server ready at: http://localhost:4000`);
 });

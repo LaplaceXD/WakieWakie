@@ -1,4 +1,4 @@
-import * as schema from "@/database/schemas";
+import * as schema from "@/database/models";
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 

@@ -45,4 +45,12 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ["**/__generated__/**/*"],
+      rules: {
+        "@typescript-eslint/ban-types": "off",
+      },
+    },
+  ],
 };
