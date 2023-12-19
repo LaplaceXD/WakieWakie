@@ -11,8 +11,7 @@
   "scripts": {
     "prepare": "husky install && yarn gql:generate && yarn db:migrate",
     "prestart": "yarn gql:generate",
-    "start": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
-    "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\" \" yarn gql:generate --watch\"",
+    "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
     "build": "yarn workspace @wakiewakie/client build",
     "lint": "eslint . --fix --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
