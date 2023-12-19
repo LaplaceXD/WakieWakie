@@ -1,7 +1,7 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 export default {
-  schema: ["server/src/modules/**/*.schema.ts", "server/src/index.ts"],
+  schema: "server/src/modules/**/*.schema.ts",
   generates: {
     "server/src/__generated__/gql.ts": {
       plugins: ["typescript", "typescript-resolvers"],
