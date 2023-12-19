@@ -11,7 +11,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
-    "build": "yarn workspace @wakiewakie/client build && yarn workspace @wakiewakie/server build",
+    "build": "yarn workspace @wakiewakie/client build",
     "db:migrate": "yarn workspace @wakiewakie/server db:migrate",
     "lint": "eslint . --fix --report-unused-disable-directives --max-warnings 5",
     "format": "prettier --write ."
@@ -31,11 +31,7 @@
     "typescript-eslint-language-service": "^5.0.5"
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": [
-      "eslint --fix --report-unused-disable-directives --max-warnings 0"
-    ],
-    "*.{cjs,js,jsx,ts,tsx,md,html,css,json}": [
-      "prettier --write"
-    ]
+    "**/*.{ts,tsx}": "eslint --fix --report-unused-disable-directives --max-warnings 0",
+    "*.{cjs,js,jsx,ts,tsx,md,html,css,json}": "prettier --write"
   }
 }
