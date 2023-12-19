@@ -6,7 +6,7 @@ import { conversations } from "./conversations";
 import { users } from "./users";
 
 export const messages = sqliteTable("messages", {
-  id: text("message_id").notNull().$defaultFn(randomUUID),
+  id: text("message_id").notNull().primaryKey().$defaultFn(randomUUID),
   conversationId: text("conversation_id")
     .notNull()
     .references(() => conversations.id),
