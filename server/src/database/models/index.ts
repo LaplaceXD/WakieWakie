@@ -1,3 +1,4 @@
+export * from "./attachments";
 export * from "./auth";
 export * from "./completed_routines";
 export * from "./conversation_users";
