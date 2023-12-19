@@ -1,5 +1,14 @@
 {
+  "version": 2,
   "regions": ["sin1"],
-  "builds": [{ "src": "./src/index.ts", "use": "@vercel/node" }],
-  "rewrites": [{ "source": "/(.*)", "destination": "/src/index.ts" }]
+  "builds": [
+    {
+      "src": "src/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["src/**"]
+      }
+    }
+  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "src/index.ts" }]
 }
