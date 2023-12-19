@@ -6,13 +6,13 @@ CREATE TABLE `attachments` (
 );
 --> statement-breakpoint
 CREATE TABLE `auth` (
-	`user_id` text PRIMARY KEY NOT NULL,
+	`auth_id` text PRIMARY KEY NOT NULL,
 	`email` text NOT NULL,
 	`username` text NOT NULL,
 	`password` text NOT NULL,
 	`status` text DEFAULT 'active' NOT NULL,
 	`last_login` integer,
-	FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`auth_id`) REFERENCES `users`(`user_id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `completed_routines` (
@@ -64,6 +64,7 @@ CREATE TABLE `routines` (
 CREATE TABLE `users` (
 	`user_id` text PRIMARY KEY NOT NULL,
 	`first_name` text NOT NULL,
+	`last_name` text DEFAULT '' NOT NULL,
 	`bio` text DEFAULT '' NOT NULL,
 	`gender` text NOT NULL,
 	`interest` text NOT NULL,

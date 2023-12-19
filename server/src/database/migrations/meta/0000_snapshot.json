@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "160f95b0-1e34-4ad3-b45c-c4ea0afd2cd8",
+  "id": "f56329f1-bd70-4fcb-a8ac-c4f1af7d111e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "attachments": {
@@ -47,8 +47,8 @@
     "auth": {
       "name": "auth",
       "columns": {
-        "user_id": {
-          "name": "user_id",
+        "auth_id": {
+          "name": "auth_id",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
@@ -114,11 +114,11 @@
         }
       },
       "foreignKeys": {
-        "auth_user_id_users_user_id_fk": {
-          "name": "auth_user_id_users_user_id_fk",
+        "auth_auth_id_users_user_id_fk": {
+          "name": "auth_auth_id_users_user_id_fk",
           "tableFrom": "auth",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
+          "columnsFrom": ["auth_id"],
           "columnsTo": ["user_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -431,6 +431,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "''"
         },
         "bio": {
           "name": "bio",

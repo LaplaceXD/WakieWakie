@@ -6,7 +6,7 @@ import { users } from "./users";
 export const auth = sqliteTable(
   "auth",
   {
-    id: text("user_id")
+    id: text("auth_id")
       .primaryKey()
       .notNull()
       .references(() => users.id),

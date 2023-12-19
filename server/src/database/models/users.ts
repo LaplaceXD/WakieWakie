@@ -1,3 +1,4 @@
+import { Gender, Interest } from "@/__generated__/gql";
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
 import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
@@ -7,10 +8,14 @@ export const users = sqliteTable(
   {
     id: text("user_id").primaryKey().notNull().$defaultFn(randomUUID),
     firstName: text("first_name").notNull(),
-    lastName: text("first_name").notNull(),
+    lastName: text("last_name").notNull().default(""),
     bio: text("bio").notNull().default(""),
-    gender: text("gender").notNull(),
-    interest: text("interest", { enum: ["Male", "Female", "Both"] }).notNull(),
+    gender: text("gender", { enum: ["MALE", "FEMALE", "OTHER"] })
+      .notNull()
+      .$type<Gender>(),
+    interest: text("interest", { enum: ["MALE", "FEMALE", "EVERYONE"] })
+      .notNull()
+      .$type<Interest>(),
     city: text("city").notNull().default(""),
     country: text("country").notNull(),
     alarmTime: text("alarm_time").notNull(),

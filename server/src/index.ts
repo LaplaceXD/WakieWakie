@@ -6,15 +6,23 @@ import cors from "cors";
 import express from "express";
 import { createServer } from "http";
 
-import { resolvers } from "./modules/auth/auth.resolvers";
-import { typeDefs } from "./modules/auth/auth.schema";
+import * as root from "@/modules/root";
+import * as users from "@/modules/users";
 
 const app = express();
 const httpServer = createServer(app);
 
 const server = new ApolloServer({
-  typeDefs: [typeDefs],
-  resolvers: [resolvers],
+  typeDefs: [root.typeDefs, users.typeDefs],
+  resolvers: {
+    ...root.resolvers,
+    Query: {
+      ...users.queries,
+    },
+    Mutation: {
+      ...users.mutations,
+    },
+  },
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
