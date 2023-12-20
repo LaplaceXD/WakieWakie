@@ -25,7 +25,10 @@ export const auth = sqliteTable(
 );
 
 export const userAuth = relations(users, ({ one }) => ({
-  auth: one(auth),
+  auth: one(auth, {
+    fields: [users.id],
+    references: [auth.id],
+  }),
 }));
 
 export const authUser = relations(auth, ({ one }) => ({

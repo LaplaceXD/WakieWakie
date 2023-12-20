@@ -1,20 +1,15 @@
-import { QueryResolvers } from "@/__generated__/gql";
-import { db } from "@/database";
+import { QueryResolvers, ResponseCode } from "@/__generated__/gql";
+import { errors } from "@/modules/root";
 
 export const queries: QueryResolvers = {
-  users: () => {
-    return db.query.users.findMany({
-      columns: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        bio: true,
-        gender: true,
-        interest: true,
-        city: true,
-        country: true,
-        alarmTime: true,
-      },
-    });
+  me: (_, __, { session }) => {
+    if (!session.user) return { ...errors.UNAUTHENTICATED, user: null };
+
+    return {
+      code: ResponseCode.Ok,
+      success: true,
+      message: "Queried successfully!",
+      user: session.user,
+    };
   },
 };

@@ -8,9 +8,8 @@ export const typeDefs = gql`
   enum ResponseCode {
     OK
     BAD_USER_INPUT
-    UNAUTHORIZED
+    UNAUTHENTICATED
     FORBIDDEN
-    INTERNAL_SERVER_ERROR
   }
 
   "Base interface for responses."

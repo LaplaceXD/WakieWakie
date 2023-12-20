@@ -63,24 +63,23 @@ export const typeDefs = gql`
     alarmTime: Timez!
   }
 
-  "Response returned from registration."
-  type RegistrationResponse implements Response {
-    "The status code for registration."
+  "Response object containing a user object."
+  type UserResponse implements Response {
     code: ResponseCode!
-    "A boolean signifying whether the registration was a success."
     success: Boolean!
-    "The operation's message."
     message: JSON!
-    "The user that was registered."
     user: User
   }
 
   type Mutation {
     "Register a user."
-    registerUser(input: RegisterInput!): RegistrationResponse!
+    registerUser(input: RegisterInput!): UserResponse!
+    "Login a registereed user."
+    loginUser(username: String!, password: String!): UserResponse!
   }
 
   type Query {
-    users: [User!]!
+    "Get the currently logged in user."
+    me: UserResponse!
   }
 `;
