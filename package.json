@@ -9,7 +9,7 @@
     "server"
   ],
   "scripts": {
-    "prepare": "husky install && yarn gql:generate && yarn db:migrate",
+    "prepare": "husky install && yarn gql:generate",
     "prestart": "yarn gql:generate",
     "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
     "build": "yarn workspace @wakiewakie/client build && yarn workspace @wakiewakie/server build",
