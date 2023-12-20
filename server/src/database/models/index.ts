@@ -5,4 +5,5 @@ export * from "./conversation_users";
 export * from "./conversations";
 export * from "./notifications";
 export * from "./routines";
+export * from "./sleep_logs";
 export * from "./users";
