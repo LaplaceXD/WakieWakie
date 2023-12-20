@@ -9,32 +9,36 @@ import { createServer } from "http";
 import * as root from "@/modules/root";
 import * as users from "@/modules/users";
 
-const app = express();
-const httpServer = createServer(app);
+async function startServer() {
+  const app = express();
+  const httpServer = createServer(app);
 
-const server = new ApolloServer({
-  typeDefs: [root.typeDefs, users.typeDefs],
-  resolvers: {
-    ...root.resolvers,
-    Query: {
-      ...users.queries,
+  const server = new ApolloServer({
+    typeDefs: [root.typeDefs, users.typeDefs],
+    resolvers: {
+      ...root.resolvers,
+      Query: {
+        ...users.queries,
+      },
+      Mutation: {
+        ...users.mutations,
+      },
     },
-    Mutation: {
-      ...users.mutations,
-    },
-  },
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-});
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
 
-await server.start();
+  await server.start();
 
-app.use(
-  "/graphql",
-  cors({ origin: ["http://localhost:5173"], credentials: true }),
-  express.json(),
-  expressMiddleware(server),
-);
+  app.use(
+    "/graphql",
+    cors({ origin: ["http://localhost:5173"], credentials: true }),
+    express.json(),
+    expressMiddleware(server),
+  );
 
-httpServer.listen(4000, () => {
-  console.log(`🚀  Server ready at: http://localhost:4000`);
-});
+  return httpServer.listen(4000, () => {
+    console.log(`🚀  Server ready at: http://localhost:4000`);
+  });
+}
+
+startServer();

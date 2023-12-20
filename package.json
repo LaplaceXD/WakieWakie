@@ -12,7 +12,7 @@
     "prepare": "husky install && yarn gql:generate && yarn db:migrate",
     "prestart": "yarn gql:generate",
     "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
-    "build": "yarn workspace @wakiewakie/client build",
+    "build": "yarn workspace @wakiewakie/client build && yarn workspace @wakiewakie/server build",
     "lint": "eslint . --fix --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "db:migrate": "yarn workspace @wakiewakie/server db:migrate",
@@ -38,8 +38,5 @@
   "lint-staged": {
     "**/*.{ts,tsx}": "eslint --fix --report-unused-disable-directives --max-warnings 0",
     "*.{cjs,js,jsx,ts,tsx,md,html,css,json}": "prettier --write"
-  },
-  "dependencies": {
-    "@graphql-codegen/typescript-operations": "^4.0.1"
   }
 }

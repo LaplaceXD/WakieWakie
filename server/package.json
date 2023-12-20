@@ -2,8 +2,8 @@
   "name": "@wakiewakie/server",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "dev": "tsx watch src/index.ts",
     "db:generate": "drizzle-kit generate:sqlite --out src/database/migrations --schema src/database/models",
     "db:migrate": "tsx src/database/migrate.ts"
@@ -13,6 +13,7 @@
     "@types/cors": "^2.8.17",
     "drizzle-kit": "^0.20.6",
     "eslint-plugin-drizzle": "^0.2.2",
+    "tsc-alias": "^1.8.8",
     "tsx": "^3.12.2"
   },
   "dependencies": {

@@ -3,12 +3,12 @@
   "regions": ["sin1"],
   "builds": [
     {
-      "src": "src/index.ts",
+      "src": "dist/src/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["src/**"]
+        "includeFiles": ["dist/src/**"]
       }
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "src/index.ts" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "dist/src/index.js" }]
 }
