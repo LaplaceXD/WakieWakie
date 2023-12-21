@@ -100,4 +100,17 @@ export const mutations: MutationResolvers = {
       user,
     };
   },
+  logoutUser: async (_, __, { session }) => {
+    if (!session.user) return { ...errors.UNAUTHENTICATED, user: null };
+
+    const user = session.user;
+    await new Promise((resolve, reject) => session.destroy(err => (err ? reject(err) : resolve(true))));
+
+    return {
+      code: ResponseCode.Ok,
+      success: true,
+      message: "Logged out successfully!",
+      user,
+    };
+  },
 };

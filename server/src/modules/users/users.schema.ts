@@ -85,6 +85,8 @@ export const typeDefs = gql`
       "The password of the user."
       password: String!
     ): UserResponse!
+    "Logs out the currently logged in user."
+    logoutUser: UserResponse!
   }
 
   type Query {
