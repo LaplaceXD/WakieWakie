@@ -15,6 +15,16 @@ export const typeDefs = gql`
     EVERYONE
   }
 
+  "The auth information of a given user."
+  type Auth {
+    "The email of the user."
+    email: String!
+    "The username of the user"
+    username: String!
+    "The date when the user last logged in."
+    lastLogin: DateTime
+  }
+
   "The user schema."
   type User {
     "The user's ID in the database."
@@ -39,6 +49,8 @@ export const typeDefs = gql`
     createdAt: DateTime!
     "The date the user was updated."
     updatedAt: DateTime
+    "The auth information of a given user."
+    auth: Auth!
   }
 
   "The set of inputs required for registering a user."

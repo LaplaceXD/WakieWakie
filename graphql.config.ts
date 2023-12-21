@@ -7,11 +7,14 @@ export default {
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         useIndexSignature: true,
-        contextType: "../types/context#GraphQLContext",
+        contextType: "../types#GraphQLContext",
         scalars: {
           DateTime: { input: "Date | string | number", output: "Date | string | number" },
           Timetz: { input: "string", output: "string" },
           JSON: { input: "string | object", output: "string | object" },
+        },
+        mappers: {
+          User: "../database#User",
         },
       },
     },

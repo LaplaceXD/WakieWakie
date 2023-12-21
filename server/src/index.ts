@@ -38,6 +38,7 @@ const server = new ApolloServer<GraphQLContext>({
   typeDefs: [root.typeDefs, users.typeDefs],
   resolvers: {
     ...root.resolvers,
+    ...users.resolvers,
     Query: {
       ...users.queries,
     },

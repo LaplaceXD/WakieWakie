@@ -1,8 +1,8 @@
-import { users } from "@/database";
+import type { User } from "@/database";
 import type { Session } from "express-session";
 
 interface SessionData {
-  user: typeof users.$inferSelect;
+  user: User;
 }
 
 export interface GraphQLContext {

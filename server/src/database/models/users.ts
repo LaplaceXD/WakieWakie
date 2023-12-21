@@ -27,3 +27,5 @@ export const users = pgTable(
     locationIdx: index("location_idx").on(table.city, table.country),
   }),
 );
+
+export type User = typeof users.$inferSelect;
