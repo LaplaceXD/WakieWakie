@@ -1,4 +1,4 @@
-export * from "./users.mutations";
-export * from "./users.queries";
+export * from "./users.mutation";
+export * from "./users.query";
+export * from "./users.resolver";
 export * from "./users.schema";
-export * from "./users.resolvers";
