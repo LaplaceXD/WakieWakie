@@ -34,7 +34,7 @@ These are the necessary environment variables that must be configured to run thi
 | DB_USERNAME | `string`                    |          | `postgres`  | Database Username for Postgres    |
 | DB_PASSWORD | `string`                    |          | ` `         | Password for Postgres             |
 | DB_HOSTNAME | `string`                    |          | `localhost` | Hostname for Postgres             |
-| DB_DATABASE | wakiewakie                  | ✅       |             | Database name for Postgres        |
+| DB_DATABASE | `string`                    | ✅       |             | Database name for Postgres        |
 | DB_PORT     | `number`                    |          | `5432`      | Postgres running port             |
 
 ## License
