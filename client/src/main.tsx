@@ -1,13 +1,14 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 
+import Clock from "@/components/clock";
+import Ping from "@/components/ping";
+import ErrorPage from "@/pages/errorPage";
+import Messages from "@/pages/messages";
 import App from "./App.tsx";
-import ErrorPage from "./pages/errorPage";
-import Messages from "./pages/messages";
-import Clock from "./components/clock";
 
 const router = createBrowserRouter([
   {
@@ -20,13 +21,18 @@ const router = createBrowserRouter([
         element: <Clock />,
       },
       {
+        // Remove this later on
+        path: "/ping",
+        element: <Ping />,
+      },
+      {
         path: "/messages",
         element: <Messages />,
       },
     ],
   },
 ]);
-        
+
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   cache: new InMemoryCache(),
