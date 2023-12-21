@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 
-import Clock from "@/components/clock";
+import Home from "@/pages/home";
 import Ping from "@/components/ping";
 import ErrorPage from "@/pages/errorPage";
 import Messages from "@/pages/messages";
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Clock />,
+        element: <Home />,
       },
       {
         // Remove this later on
