@@ -1,12 +1,75 @@
-import { serve } from "@hono/node-server";
-import { Hono } from "hono";
+import "dotenv/config";
 
-const app = new Hono();
-app.get("/", c => c.text("Hello Hono!"));
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import { createServer } from "http";
 
-serve(app, ({ address, port }) => {
-  const protocol = address === "0.0.0.0" ? "http" : "https";
-  const name = address === "0.0.0.0" ? "localhost" : address;
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
-  console.log(`Server running at ${protocol}://${name}:${port}`);
+import * as config from "@/config";
+import { connection } from "@/database";
+import * as root from "@/modules/root";
+import * as users from "@/modules/users";
+import { GraphQLContext } from "./types";
+
+const app = express();
+const httpServer = createServer(app);
+
+app.use(express.json());
+app.use(cors(config.cors));
+app.use(session(config.session));
+
+// This setting is required for graphiql playground
+// to work with cookies in development environments
+if (process.env["NODE_ENV"] !== "production") {
+  // trust x-forwarded-* headers
+  app.set("trust proxy", 1);
+  // set x-forward-proto to simulate a secure http connection
+  app.use((req, _, next) => {
+    req.headers["x-forwarded-proto"] = "https";
+    return next();
+  });
+}
+
+const server = new ApolloServer<GraphQLContext>({
+  typeDefs: [root.typeDefs, users.typeDefs],
+  resolvers: {
+    ...root.resolvers,
+    ...users.resolvers,
+    Query: {
+      ...users.queries,
+    },
+    Mutation: {
+      ...users.mutations,
+    },
+  },
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await connection.end({ timeout: 10_000 });
+          },
+        };
+      },
+    },
+  ],
+});
+
+const PORT = parseInt(process.env["PORT"] || "4000");
+server.start().then(() => {
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: async ({ req }) => ({ session: req.session }),
+    }),
+  );
+
+  return httpServer.listen(PORT, () => {
+    console.log(`🚀  Server ready at: http://localhost:${PORT}`);
+  });
 });

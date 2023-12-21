@@ -29,6 +29,7 @@ module.exports = {
     "no-param-reassign": "error",
     "no-unneeded-ternary": "error",
 
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -45,4 +46,13 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ["**/__generated__/**/*"],
+      rules: {
+        "@typescript-eslint/ban-types": "off",
+        "no-unused-vars": "off",
+      },
+    },
+  ],
 };
