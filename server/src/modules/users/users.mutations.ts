@@ -1,7 +1,6 @@
 import { ApolloServerErrorCode } from "@apollo/server/errors";
 import { eq, or, sql } from "drizzle-orm";
 import { GraphQLError } from "graphql";
-import { promisify } from "util";
 import { z } from "zod";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
@@ -13,6 +12,15 @@ import { userSchema } from "./users.validation";
 
 export const mutations: MutationResolvers = {
   loginUser: async (_, { username, password }, { session }) => {
+    if (session.user) {
+      return {
+        code: ResponseCode.BadRequest,
+        success: false,
+        message: "You are already logged in.",
+        user: null,
+      };
+    }
+
     const INVALID_CREDENTIALS_RESPONSE = {
       ...errors.BAD_USER_INPUT,
       message: "You have inputted an invalid username or password. Please try again.",
@@ -42,8 +50,6 @@ export const mutations: MutationResolvers = {
       });
     }
 
-    // Destroy first session if user does a relogin
-    if (session.user) await promisify(session.destroy)();
     session.user = user;
 
     return {

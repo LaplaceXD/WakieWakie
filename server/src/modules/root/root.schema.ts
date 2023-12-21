@@ -9,6 +9,7 @@ export const typeDefs = gql`
   enum ResponseCode {
     OK
     BAD_USER_INPUT
+    BAD_REQUEST
     UNAUTHENTICATED
     FORBIDDEN
   }
