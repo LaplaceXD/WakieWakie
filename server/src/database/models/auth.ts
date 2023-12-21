@@ -34,3 +34,5 @@ export const userAuth = relations(users, ({ one }) => ({
 export const authUser = relations(auth, ({ one }) => ({
   user: one(users),
 }));
+
+export type Auth = typeof auth.$inferSelect;

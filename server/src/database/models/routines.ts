@@ -27,3 +27,5 @@ export const userRoutines = relations(users, ({ many }) => ({
 export const routineUser = relations(routines, ({ one }) => ({
   user: one(users),
 }));
+
+export type Routine = typeof routines.$inferSelect;

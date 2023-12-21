@@ -41,3 +41,5 @@ export const conversationUsersRelations = relations(conversationUsers, ({ one })
   users: one(users),
   conversations: one(conversations),
 }));
+
+export type ConversationUser = typeof conversationUsers.$inferSelect;

@@ -20,3 +20,5 @@ export const userNotifications = relations(users, ({ many }) => ({
 export const notificationUser = relations(notifications, ({ one }) => ({
   user: one(notifications),
 }));
+
+export type Notification = typeof notifications.$inferSelect;

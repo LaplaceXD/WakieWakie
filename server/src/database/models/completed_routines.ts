@@ -32,3 +32,5 @@ export const completedRoutinesRelations = relations(users, ({ one }) => ({
   routine: one(routines),
   completer: one(users),
 }));
+
+export type CompletedRoutine = typeof completedRoutines.$inferSelect;
