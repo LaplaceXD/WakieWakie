@@ -33,4 +33,4 @@ export const messageRelations = relations(messages, ({ one }) => ({
   user: one(users),
 }));
 
-export type Message = typeof messages.$inferSelect;
+export type MessageModel = typeof messages.$inferSelect;

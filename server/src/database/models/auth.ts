@@ -35,4 +35,4 @@ export const authUser = relations(auth, ({ one }) => ({
   user: one(users),
 }));
 
-export type Auth = typeof auth.$inferSelect;
+export type AuthModel = typeof auth.$inferSelect;

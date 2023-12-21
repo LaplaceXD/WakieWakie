@@ -37,4 +37,4 @@ export const messageAttachments = relations(messages, ({ many }) => ({
   attachments: many(attachments),
 }));
 
-export type Attachment = typeof attachments.$inferSelect;
+export type AttachmentModel = typeof attachments.$inferSelect;

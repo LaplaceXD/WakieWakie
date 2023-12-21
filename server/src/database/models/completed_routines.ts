@@ -33,4 +33,4 @@ export const completedRoutinesRelations = relations(users, ({ one }) => ({
   completer: one(users),
 }));
 
-export type CompletedRoutine = typeof completedRoutines.$inferSelect;
+export type CompletedRoutineModel = typeof completedRoutines.$inferSelect;

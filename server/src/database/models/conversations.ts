@@ -5,4 +5,4 @@ export const conversations = pgTable("conversations", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export type Conversation = typeof conversations.$inferSelect;
+export type ConversationModel = typeof conversations.$inferSelect;
