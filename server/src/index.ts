@@ -40,6 +40,7 @@ const server = new ApolloServer<GraphQLContext>({
     ...root.resolvers,
     ...users.resolvers,
     Query: {
+      ...root.queries,
       ...users.queries,
     },
     Mutation: {

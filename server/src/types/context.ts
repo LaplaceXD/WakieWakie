@@ -1,8 +1,8 @@
-import type { User } from "@/database";
+import type { UserModel } from "@/database";
 import type { Session } from "express-session";
 
 interface SessionData {
-  user: User;
+  user: UserModel;
 }
 
 export interface GraphQLContext {

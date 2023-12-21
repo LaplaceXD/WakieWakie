@@ -23,4 +23,8 @@ export const typeDefs = gql`
     "Response message."
     message: JSON!
   }
+
+  type Query {
+    ping: String!
+  }
 `;

@@ -20,4 +20,4 @@ export const sleepLogUser = relations(sleepLogs, ({ one }) => ({
   user: one(users),
 }));
 
-export type SleepLog = typeof sleepLogs.$inferSelect;
+export type SleepLogModel = typeof sleepLogs.$inferSelect;

@@ -14,7 +14,7 @@ A dating app that aims to match people nearby based on the time they wake up. Th
 3. Install the necessary dependencies using `yarn`.
 4. Ensure that the necessary environment variables are configured on your local machine, check the [ENV](#env) section.
 5. Run the migrations on the database using `yarn db:migrate`.
-6. Run the app locally using `yarn dev`.
+6. Run the app locally using `yarn start`.
    > This runs the client at `http://localhost:5173`, and the server at `http://localhost:4000`.
 7. Open the web app on your desired browser using the URL above.
    > If you want to test out the server via the `GraphQL Explorer`, you can head over to `http://localhost:4000/graphql`
