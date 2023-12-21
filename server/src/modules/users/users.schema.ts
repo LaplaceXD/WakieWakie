@@ -36,9 +36,9 @@ export const typeDefs = gql`
     "The user's waking time."
     alarmTime: Timetz!
     "The date the user was created."
-    createdAt: Date!
+    createdAt: DateTime!
     "The date the user was updated."
-    updatedAt: Date
+    updatedAt: DateTime
   }
 
   "The set of inputs required for registering a user."
@@ -78,7 +78,7 @@ export const typeDefs = gql`
   type Mutation {
     "Register a user."
     registerUser(userDetails: RegisterInput!): UserResponse!
-    "Login a registereed user."
+    "Login a registered user."
     loginUser(
       "The username (or email) of the user."
       username: String!

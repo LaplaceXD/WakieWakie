@@ -8,6 +8,11 @@ export default {
       config: {
         useIndexSignature: true,
         contextType: "../types/context#GraphQLContext",
+        scalars: {
+          DateTime: { input: "Date | string | number", output: "Date | string | number" },
+          Timetz: { input: "string", output: "string" },
+          JSON: { input: "string | object", output: "string | object" },
+        },
       },
     },
   },

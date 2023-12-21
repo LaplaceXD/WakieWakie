@@ -1,8 +1,8 @@
 import { GraphQLScalarType, Kind } from "graphql";
 
-const dateScalar = new GraphQLScalarType({
-  name: "Date",
-  description: "The `Date` custom scalar type Datetime objects, it represents time in ISO string format.",
+const dateTimeScalar = new GraphQLScalarType({
+  name: "DateTime",
+  description: "The `DateTime` custom scalar type Datetime objects, it represents time in ISO string format.",
   serialize(value) {
     if (value instanceof Date) {
       return value.toISOString();
@@ -30,4 +30,4 @@ const dateScalar = new GraphQLScalarType({
   },
 });
 
-export default dateScalar;
+export default dateTimeScalar;
