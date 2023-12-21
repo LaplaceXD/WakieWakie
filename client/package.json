@@ -9,16 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
+    "graphql": "^16.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "vite": "^5.0.8",
     "@vitejs/plugin-react-swc": "^3.5.0",
-    "prettier-plugin-tailwindcss": "^0.5.9",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5"
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "vite": "^5.0.8"
   }
 }

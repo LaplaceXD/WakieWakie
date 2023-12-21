@@ -1,10 +1,24 @@
+import { useQuery } from "@apollo/client";
 import { useState } from "react";
+
+import { gql } from "@/__generated__/";
+
+import "./App.css";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+
+const PING = gql(`
+  query Ping {
+    ping
+  }
+`);
 
 function App() {
+  const { loading, data } = useQuery(PING);
   const [count, setCount] = useState(0);
+
+  if (loading) return "Loading...";
+  console.log(data);
 
   return (
     <>
