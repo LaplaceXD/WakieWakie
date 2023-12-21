@@ -17,7 +17,10 @@
     "composite": true,
     "rootDir": ".",
     "outDir": "./dist",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
