@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2015"],
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "ES2015",
+
+    "noUnusedParameters": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

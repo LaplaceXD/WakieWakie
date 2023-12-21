@@ -9,13 +9,22 @@
     "server"
   ],
   "scripts": {
-    "prepare": "husky install",
-    "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
+    "prepare": "husky install && yarn gql:generate",
+    "prestart": "yarn gql:generate",
+    "start": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\"",
+    "dev": "concurrently \"yarn workspace @wakiewakie/client dev\" \"yarn workspace @wakiewakie/server dev\" \"yarn gql:generate --watch\"",
     "build": "yarn workspace @wakiewakie/client build && yarn workspace @wakiewakie/server build",
     "lint": "eslint . --fix --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:migrate": "yarn workspace @wakiewakie/server db:migrate",
+    "gql:generate": "graphql-codegen --config graphql.config.ts"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
+    "@types/node": "^20.10.4",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "concurrently": "^8.2.2",
@@ -29,11 +38,7 @@
     "typescript-eslint-language-service": "^5.0.5"
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": [
-      "eslint --fix --report-unused-disable-directives --max-warnings 0"
-    ],
-    "*.{cjs,js,jsx,ts,tsx,md,html,css}": [
-      "prettier --write"
-    ]
+    "**/*.{ts,tsx}": "eslint --fix --report-unused-disable-directives --max-warnings 0",
+    "*.{cjs,js,jsx,ts,tsx,md,html,css,json}": "prettier --write"
   }
 }
