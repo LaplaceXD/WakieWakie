@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const typeDefs = gql`
-  scalar Timez
+  scalar Timetz
   scalar JSON
   scalar Date
 

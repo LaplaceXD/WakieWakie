@@ -1,8 +1,8 @@
-import type { User } from "@/__generated__/gql";
+import { users } from "@/database";
 import type { Session } from "express-session";
 
 interface SessionData {
-  user: Omit<User, "__typename">;
+  user: typeof users.$inferSelect;
 }
 
 export interface GraphQLContext {

@@ -34,7 +34,11 @@ export const typeDefs = gql`
     "The user's country."
     country: String!
     "The user's waking time."
-    alarmTime: Timez!
+    alarmTime: Timetz!
+    "The date the user was created."
+    createdAt: Date!
+    "The date the user was updated."
+    updatedAt: Date
   }
 
   "The set of inputs required for registering a user."
@@ -60,7 +64,7 @@ export const typeDefs = gql`
     "The country where the user lives."
     country: String!
     "The time the user wakes up."
-    alarmTime: Timez!
+    alarmTime: Timetz!
   }
 
   "Response object containing a user object."
@@ -75,7 +79,12 @@ export const typeDefs = gql`
     "Register a user."
     registerUser(userDetails: RegisterInput!): UserResponse!
     "Login a registereed user."
-    loginUser(username: String!, password: String!): UserResponse!
+    loginUser(
+      "The username (or email) of the user."
+      username: String!
+      "The password of the user."
+      password: String!
+    ): UserResponse!
   }
 
   type Query {

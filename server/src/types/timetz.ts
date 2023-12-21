@@ -1,9 +1,9 @@
 import { GraphQLScalarType, Kind } from "graphql";
 
 const timezScalar = new GraphQLScalarType({
-  name: "Timez",
+  name: "Timetz",
   description:
-    "The `Timez` custom scalar type represents time with a corresponding timezone in the format HH:mm:ss+ZZZZ (24-hour).",
+    "The `Timetz` custom scalar type represents time with a corresponding timezone in the format HH:mm:ss+ZZZZ (24-hour).",
   serialize(value) {
     const timeRegex = /^\d{2}:\d{2}:\d{2}([+-]\d{1,4})?$/;
 
