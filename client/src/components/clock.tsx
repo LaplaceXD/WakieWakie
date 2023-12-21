@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-const Clock = () => {
+function Clock() {
   const [fontSize, setFontSize] = useState(16); // Set an initial font size
 
   useEffect(() => {
     // Update font size whenever the window is resized
     const handleResize = () => {
-      const faceWidth = document.getElementById("face").offsetWidth;
+      const faceWidth = document.getElementById("face")!.offsetWidth;
       // You can adjust the multiplier as needed
       const newFontSize = faceWidth * 0.03;
       setFontSize(newFontSize);
@@ -51,6 +51,6 @@ const Clock = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Clock;

@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from "graphql";
-import { User } from "../database";
+import { UserModel } from "../database";
 import { GraphQLContext } from "../types";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -70,6 +70,7 @@ export type Query = {
   __typename?: "Query";
   /** Get the currently logged in user. */
   me: UserResponse;
+  ping: Scalars["String"]["output"];
 };
 
 /** The set of inputs required for registering a user. */
@@ -249,7 +250,7 @@ export type ResolversTypes = ResolversObject<{
   ResponseCode: ResponseCode;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   Timetz: ResolverTypeWrapper<Scalars["Timetz"]["output"]>;
-  User: ResolverTypeWrapper<User>;
+  User: ResolverTypeWrapper<UserModel>;
   UserResponse: ResolverTypeWrapper<Omit<UserResponse, "user"> & { user?: Maybe<ResolversTypes["User"]> }>;
 }>;
 
@@ -266,7 +267,7 @@ export type ResolversParentTypes = ResolversObject<{
   Response: ResolversInterfaceTypes<ResolversParentTypes>["Response"];
   String: Scalars["String"]["output"];
   Timetz: Scalars["Timetz"]["output"];
-  User: User;
+  User: UserModel;
   UserResponse: Omit<UserResponse, "user"> & { user?: Maybe<ResolversParentTypes["User"]> };
 }>;
 
@@ -312,6 +313,7 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
 > = ResolversObject<{
   me?: Resolver<ResolversTypes["UserResponse"], ParentType, ContextType>;
+  ping?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
 }>;
 
 export type ResponseResolvers<
