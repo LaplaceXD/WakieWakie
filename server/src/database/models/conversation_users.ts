@@ -1,27 +1,31 @@
-import { relations, sql } from "drizzle-orm";
-import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
+import { boolean, foreignKey, pgTable, primaryKey, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { conversations } from "./conversations";
 import { users } from "./users";
 
-export const conversationUsers = sqliteTable(
+export const conversationUsers = pgTable(
   "conversation_users",
   {
-    conversationId: text("conversation_id")
-      .notNull()
-      .references(() => conversations.id),
-    userId: text("user_id")
-      .notNull()
-      .references(() => users.id),
-    invitedAt: int("invited_at", { mode: "timestamp" })
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
-    acceptedAt: int("accepted_at", { mode: "timestamp" }),
-    isMuted: int("is_muted", { mode: "boolean" }).notNull().default(false),
-    isBlocked: int("is_blocked", { mode: "boolean" }).notNull().default(false),
+    conversationId: uuid("conversation_id").notNull(),
+    userId: uuid("user_id").notNull(),
+    invitedAt: timestamp("invited_at").notNull().defaultNow(),
+    acceptedAt: timestamp("accepted_at"),
+    isMuted: boolean("is_muted").notNull().default(false),
+    isBlocked: boolean("is_blocked").notNull().default(false),
   },
-  conversationUsers => ({
-    id: primaryKey({ columns: [conversationUsers.conversationId, conversationUsers.userId] }),
+  table => ({
+    pk: primaryKey({ columns: [table.conversationId, table.userId] }),
+    fkConversation: foreignKey({
+      name: "conversation_users_conversation_fk",
+      columns: [table.conversationId],
+      foreignColumns: [conversations.id],
+    }),
+    fkUsers: foreignKey({
+      name: "conversation_users_users_fk",
+      columns: [table.userId],
+      foreignColumns: [users.id],
+    }),
   }),
 );
 

@@ -1,2 +1,2 @@
-export { db } from "./db";
+export * from "./db";
 export * from "./models";

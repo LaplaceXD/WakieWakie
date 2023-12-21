@@ -1,19 +1,16 @@
-import { randomUUID } from "crypto";
-import { relations, sql } from "drizzle-orm";
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
+import { json, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
 
-export const notifications = sqliteTable("notifications", {
-  id: text("notification_id").notNull().primaryKey().$defaultFn(randomUUID),
-  userId: text("user_id")
+export const notifications = pgTable("notifications", {
+  id: uuid("notification_id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id")
     .notNull()
     .references(() => users.id),
-  content: text("content", { mode: "json" }).notNull(),
-  createdAt: int("created_at", { mode: "timestamp" })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
-  seened_at: int("seened_at", { mode: "timestamp" }),
+  content: json("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  seened_at: timestamp("seened_at"),
 });
 
 export const userNotifications = relations(users, ({ many }) => ({

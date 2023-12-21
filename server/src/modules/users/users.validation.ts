@@ -119,11 +119,12 @@ export const userSchema = z.object({
      * ([01]\d|2[0-3])                Hour ranging from 00-23
      * :                              Separator for HH:mm
      * ([0-5]\d)                      Minutes ranging from 00-59
-     * +-                             Separator for timezone
-     * \d{4}                          Timezone offset
+     * :                              Separator for mm:ss
+     * ([0-5]\d)                      Seconds ranging from 00-59
+     * ([+-]\d{1,4})?                 Optional timezone offset
      * $                              End anchor
      */
-    /^([01]\d|2[0-3]):([0-5]\d)[+-]\d{4}$/,
-    "Alarm time should be in the following format HH:mm+ZZZZ (military time).",
+    /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)([+-]\d{1,4})?$/,
+    "Alarm time should be in the following format HH:mm:ss+ZZZZ (military time).",
   ),
 });

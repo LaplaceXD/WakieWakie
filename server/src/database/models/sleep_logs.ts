@@ -1,16 +1,15 @@
-import { randomUUID } from "crypto";
-import { relations, sql } from "drizzle-orm";
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
+import { boolean, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
 
-export const sleepLogs = sqliteTable("sleep_logs", {
-  id: text("log_id").primaryKey().notNull().$defaultFn(randomUUID),
-  userId: text("user_id")
+export const sleepLogs = pgTable("sleep_logs", {
+  id: uuid("log_id").notNull().primaryKey().defaultRandom(),
+  userId: uuid("user_id")
     .notNull()
     .references(() => users.id),
-  loggedAt: int("logged_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
-  isSnooze: int("is_snooze", { mode: "boolean" }).notNull().default(false),
+  loggedAt: timestamp("logged_at").notNull().defaultNow(),
+  isSnooze: boolean("is_snooze").notNull().default(false),
 });
 
 export const userSleepLogs = relations(users, ({ many }) => ({

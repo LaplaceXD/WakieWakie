@@ -1,24 +1,23 @@
-import { randomUUID } from "crypto";
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
-import { relations, sql } from "drizzle-orm";
 import { conversations } from "./conversations";
 import { users } from "./users";
 
-export const messages = sqliteTable("messages", {
-  id: text("message_id").notNull().primaryKey().$defaultFn(randomUUID),
-  conversationId: text("conversation_id")
+export const messages = pgTable("messages", {
+  id: uuid("message_id").notNull().primaryKey().defaultRandom(),
+  conversationId: uuid("conversation_id")
     .notNull()
     .references(() => conversations.id),
-  senderId: text("sender_id")
+  senderId: uuid("sender_id")
     .notNull()
     .references(() => users.id),
   content: text("content").notNull().default(""),
-  sentAt: int("sent_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
-  receivedAt: int("received_at", { mode: "timestamp" }),
-  seenedAt: int("seened_at", { mode: "timestamp" }),
-  deletedAt: int("deleted_at", { mode: "timestamp" }),
-  updatedAt: int("updated_at", { mode: "timestamp" }),
+  sentAt: timestamp("sent_at").notNull().defaultNow(),
+  receivedAt: timestamp("received_at"),
+  seenedAt: timestamp("seened_at"),
+  deletedAt: timestamp("deleted_at"),
+  updatedAt: timestamp("updated_at"),
 });
 
 export const userMessages = relations(users, ({ many }) => ({
@@ -29,10 +28,7 @@ export const conversationMessages = relations(conversations, ({ many }) => ({
   messages: many(messages),
 }));
 
-export const messageConversation = relations(messages, ({ one }) => ({
+export const messageRelations = relations(messages, ({ one }) => ({
   conversation: one(conversations),
-}));
-
-export const messageUser = relations(messages, ({ one }) => ({
   user: one(users),
 }));

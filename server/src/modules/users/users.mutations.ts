@@ -24,7 +24,7 @@ export const mutations: MutationResolvers = {
 
     const [authInfo] = await db
       .update(auth)
-      .set({ lastLogin: sql`CURRENT_TIMESTAMP` })
+      .set({ lastLogin: sql`now()` })
       .where(or(eq(auth.email, validatedUsername.data), eq(auth.username, validatedUsername.data)))
       .returning();
     if (!authInfo) return INVALID_CREDENTIALS_RESPONSE;
@@ -53,18 +53,18 @@ export const mutations: MutationResolvers = {
       user,
     };
   },
-  registerUser: async (_, { input }) => {
-    const validatedInput = await userSchema.safeParseAsync(input);
-    if (!validatedInput.success) {
+  registerUser: async (_, { userDetails }) => {
+    const validated = await userSchema.safeParseAsync(userDetails);
+    if (!validated.success) {
       return {
         ...errors.BAD_USER_INPUT,
-        message: JSON.stringify(parseZodErrors(validatedInput.error.errors)),
+        message: JSON.stringify(parseZodErrors(validated.error.errors)),
         user: null,
       };
     }
 
     const user = await db.transaction(async tx => {
-      const { email, username, password, ...userInput } = validatedInput.data;
+      const { email, username, password, ...userInput } = validated.data;
       const hashedPassword = await hash.hashPassword(password);
 
       const [userData] = await tx.insert(users).values(userInput).returning();

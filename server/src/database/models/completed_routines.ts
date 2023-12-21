@@ -1,24 +1,22 @@
-import { relations, sql } from "drizzle-orm";
-import { int, primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { relations } from "drizzle-orm";
+import { pgTable, primaryKey, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { routines } from "./routines";
 import { users } from "./users";
 
-export const completedRoutines = sqliteTable(
+export const completedRoutines = pgTable(
   "completed_routines",
   {
-    routineId: text("routine_id")
+    routineId: uuid("routine_id")
       .notNull()
       .references(() => routines.id),
-    completerId: text("completer_id")
+    completerId: uuid("completer_id")
       .notNull()
       .references(() => users.id),
-    completedAt: int("completed_at", { mode: "timestamp" })
-      .notNull()
-      .default(sql`CURRENT_TIMESTAMP`),
+    completedAt: timestamp("completed_at").notNull().defaultNow(),
   },
-  completedRoutine => ({
-    id: primaryKey({ columns: [completedRoutine.routineId, completedRoutine.completerId] }),
+  table => ({
+    id: primaryKey({ columns: [table.routineId, table.completerId] }),
   }),
 );
 
@@ -30,10 +28,7 @@ export const routinesCompleted = relations(routines, ({ many }) => ({
   completed: many(completedRoutines),
 }));
 
-export const completedRoutinesRoutine = relations(users, ({ one }) => ({
+export const completedRoutinesRelations = relations(users, ({ one }) => ({
   routine: one(routines),
-}));
-
-export const completedRoutinesCompleter = relations(completedRoutines, ({ one }) => ({
   completer: one(users),
 }));

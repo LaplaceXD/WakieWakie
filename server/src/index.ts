@@ -10,6 +10,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
 import * as config from "@/config";
+import { connection } from "@/database";
 import * as root from "@/modules/root";
 import * as users from "@/modules/users";
 import { GraphQLContext } from "./types";
@@ -25,7 +26,7 @@ app.use(session(config.session));
 // to work with cookies in development environments
 if (process.env["NODE_ENV"] !== "production") {
   // trust x-forwarded-* headers
-  app.set("trust proxy", true);
+  app.set("trust proxy", 1);
   // set x-forward-proto to simulate a secure http connection
   app.use((req, _, next) => {
     req.headers["x-forwarded-proto"] = "https";
@@ -44,7 +45,18 @@ const server = new ApolloServer<GraphQLContext>({
       ...users.mutations,
     },
   },
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await connection.end({ timeout: 10_000 });
+          },
+        };
+      },
+    },
+  ],
 });
 
 const PORT = parseInt(process.env["PORT"] || "4000");

@@ -1,22 +1,22 @@
 import { relations } from "drizzle-orm";
-import { index, int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
 
-export const auth = sqliteTable(
+export const auth = pgTable(
   "auth",
   {
-    id: text("auth_id")
+    id: uuid("auth_id")
       .primaryKey()
       .notNull()
       .references(() => users.id),
-    email: text("email").notNull().unique("unique_email"),
-    username: text("username").notNull().unique("unique_username"),
-    password: text("password").notNull(),
-    status: text("status", { enum: ["active", "deactivated", "deleted", "blocked"] })
-      .default("active")
+    email: varchar("email", { length: 256 }).notNull().unique("unique_email"),
+    username: varchar("username", { length: 256 }).notNull().unique("unique_username"),
+    password: varchar("password").notNull(),
+    status: varchar("status", { length: 12, enum: ["ACTIVE", "DEACTIVATED", "DELETED", "BLOCKED"] })
+      .default("ACTIVE")
       .notNull(),
-    lastLogin: int("last_login", { mode: "timestamp" }),
+    lastLogin: timestamp("last_login"),
   },
   auth => ({
     emailIdx: index("email_idx").on(auth.email),

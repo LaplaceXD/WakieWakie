@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 export const typeDefs = gql`
   scalar Timez
   scalar JSON
+  scalar Date
 
   "These are the possible response codes returned from a response."
   enum ResponseCode {
