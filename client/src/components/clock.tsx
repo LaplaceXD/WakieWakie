@@ -1,4 +1,4 @@
-const AnalogClock = () => {
+const Clock = () => {
   return (
     <div className="aspect-square w-1/3 rounded-full bg-slate-500">
       <div>
@@ -10,4 +10,4 @@ const AnalogClock = () => {
   );
 };
 
-export default AnalogClock;
+export default Clock;

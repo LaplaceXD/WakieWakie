@@ -6,7 +6,7 @@ import "./index.css";
 import App from "./App.tsx";
 import ErrorPage from "./pages/errorPage";
 import Messages from "./pages/messages";
-import AnalogClock from "./components/analogClock";
+import Clock from "./components/clock";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <AnalogClock />,
+        element: <Clock />,
       },
       {
         path: "/messages",
