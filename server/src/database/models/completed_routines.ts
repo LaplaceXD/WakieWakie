@@ -16,7 +16,7 @@ export const completedRoutines = pgTable(
     completedAt: timestamp("completed_at").notNull().defaultNow(),
   },
   table => ({
-    id: primaryKey({ columns: [table.routineId, table.completerId] }),
+    pk: primaryKey({ columns: [table.routineId, table.completerId] }),
   }),
 );
 
