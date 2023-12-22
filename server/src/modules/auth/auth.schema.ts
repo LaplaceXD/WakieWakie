@@ -43,18 +43,6 @@ export const typeDefs = gql`
     account: Account!
   }
 
-  "The status of the account."
-  enum AccountStatus {
-    "User is currently active."
-    ACTIVE
-    "User has deactivated their account and is awaitined deletion."
-    DEACTIVATED
-    "Account has been successfully deleted."
-    DELETED
-    "Account was banned due to various reasons."
-    BANNED
-  }
-
   "The account information of a given user."
   type Account {
     "The account's ID in the database."
@@ -63,8 +51,6 @@ export const typeDefs = gql`
     email: String!
     "The username of the user"
     username: String!
-    "The status of the account."
-    status: AccountStatus!
     "The date when the user last logged in."
     lastLogin: DateTime
   }

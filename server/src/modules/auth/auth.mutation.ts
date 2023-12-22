@@ -1,4 +1,4 @@
-import { eq, or, sql } from "drizzle-orm";
+import { and, eq, or, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
@@ -33,7 +33,12 @@ export const mutations: MutationResolvers = {
       const [authInfo] = await db
         .update(auth)
         .set({ lastLogin: sql`now()` })
-        .where(or(eq(auth.email, validatedUsername.data), eq(auth.username, validatedUsername.data)))
+        .where(
+          and(
+            eq(auth.deletedAt, sql`NULL`),
+            or(eq(auth.email, validatedUsername.data), eq(auth.username, validatedUsername.data)),
+          ),
+        )
         .returning();
       if (!authInfo) return INVALID_CREDENTIALS_RESPONSE;
 

@@ -15,6 +15,20 @@
       "when": 1703231436123,
       "tag": "0001_fearless_ulik",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1703252494816,
+      "tag": "0002_aspiring_korath",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1703253242983,
+      "tag": "0003_gifted_puck",
+      "breakpoints": true
     }
   ]
 }

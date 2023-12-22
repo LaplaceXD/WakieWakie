@@ -1,26 +1,21 @@
-import { ApolloServerErrorCode } from "@apollo/server/errors";
-import { GraphQLError } from "graphql";
-
 import { Resolvers } from "@/__generated__/gql";
 import { db } from "@/database";
+import { InternalServerError } from "@/errors";
 
 export const resolvers: Resolvers = {
   User: {
     account: async ({ id }) => {
-      const result = await db.query.auth.findFirst({
-        where: ({ id: authId }, { eq }) => eq(authId, id),
-        columns: { password: false },
-      });
-      if (!result) {
-        throw new GraphQLError("Auth does not have a corresponding user details in the database.", {
-          extensions: {
-            http: { status: 500 },
-            code: ApolloServerErrorCode.INTERNAL_SERVER_ERROR,
-          },
+      try {
+        const result = await db.query.auth.findFirst({
+          where: ({ id: authId }, { eq }) => eq(authId, id),
+          columns: { password: false, deletedAt: false },
         });
-      }
+        if (!result) throw new Error(`User ${id} does not have a corresponding user details in the database.`);
 
-      return result;
+        return result;
+      } catch (err) {
+        throw new InternalServerError(err as Error);
+      }
     },
   },
 };
