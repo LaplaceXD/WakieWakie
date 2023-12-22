@@ -1,4 +1,4 @@
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, eq, isNull, or, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
@@ -35,7 +35,7 @@ const mutations: MutationResolvers = {
         .set({ lastLogin: sql`now()` })
         .where(
           and(
-            eq(auth.deletedAt, sql`NULL`),
+            isNull(auth.deletedAt),
             or(eq(auth.email, validatedUsername.data), eq(auth.username, validatedUsername.data)),
           ),
         )
