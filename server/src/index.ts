@@ -19,6 +19,7 @@ import { WebSocketServer } from "ws";
 
 import * as auth from "@/modules/auth";
 import type { GraphQLContext } from "@/modules/context";
+import * as conversation from "@/modules/conversations";
 import * as message from "@/modules/messages";
 import * as notification from "@/modules/notifications";
 import * as root from "@/modules/root";
@@ -48,8 +49,20 @@ if (process.env["NODE_ENV"] !== "production") {
 }
 
 const schema = makeExecutableSchema({
-  typeDefs: mergeTypeDefs([root.typeDefs, auth.typeDefs, notification.typeDefs, message.typeDefs]),
-  resolvers: mergeResolvers([root.resolvers, auth.resolvers, notification.resolvers, message.resolvers]),
+  typeDefs: mergeTypeDefs([
+    root.typeDefs,
+    auth.typeDefs,
+    notification.typeDefs,
+    conversation.typeDefs,
+    message.typeDefs,
+  ]),
+  resolvers: mergeResolvers([
+    root.resolvers,
+    auth.resolvers,
+    notification.resolvers,
+    conversation.resolvers,
+    message.resolvers,
+  ]),
 });
 
 const pubsub = new PubSub();
