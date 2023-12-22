@@ -20,6 +20,7 @@ import { WebSocketServer } from "ws";
 import * as auth from "@/modules/auth";
 import type { GraphQLContext } from "@/modules/context";
 import * as message from "@/modules/messages";
+import * as notification from "@/modules/notifications";
 import * as root from "@/modules/root";
 
 import * as config from "@/config";
@@ -28,10 +29,11 @@ import { InternalServerError } from "@/errors";
 
 const app = express();
 const httpServer = createServer(app);
+const sessionParser = session(config.session);
 
 app.use(express.json());
 app.use(cors(config.cors));
-app.use(session(config.session));
+app.use(sessionParser);
 
 // This setting is required for graphiql playground
 // to work with cookies in development environments
@@ -46,16 +48,33 @@ if (process.env["NODE_ENV"] !== "production") {
 }
 
 const schema = makeExecutableSchema({
-  typeDefs: mergeTypeDefs([root.typeDefs, auth.typeDefs, message.typeDefs]),
-  resolvers: mergeResolvers([root.resolvers, auth.resolvers, message.resolvers]),
+  typeDefs: mergeTypeDefs([root.typeDefs, auth.typeDefs, notification.typeDefs, message.typeDefs]),
+  resolvers: mergeResolvers([root.resolvers, auth.resolvers, notification.resolvers, message.resolvers]),
 });
+
+const pubsub = new PubSub();
 
 const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/graphql",
 });
 
-const wsServerCleanup = useServer({ schema }, wsServer);
+const wsServerCleanup = useServer(
+  {
+    schema,
+    context: async ctx => {
+      // @ts-expect-error Incompatible TS types but are actually objects with overlap
+      await new Promise(resolve => sessionParser(ctx.extra.request, {}, () => resolve(true)));
+
+      return {
+        // @ts-expect-error The session is attached but it is not automatic due to type conflicts
+        session: ctx.extra.request.session,
+        pubsub,
+      } satisfies GraphQLContext;
+    },
+  },
+  wsServer,
+);
 
 const server = new ApolloServer<GraphQLContext>({
   schema,
@@ -82,8 +101,6 @@ const server = new ApolloServer<GraphQLContext>({
 
 const PORT = parseInt(process.env["PORT"] || "4000");
 server.start().then(() => {
-  const pubsub = new PubSub();
-
   app.use(
     "/graphql",
     expressMiddleware(server, {
