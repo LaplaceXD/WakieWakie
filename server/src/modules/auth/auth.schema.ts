@@ -119,6 +119,6 @@ export const typeDefs = gql`
 
   type Query {
     "Get the currently logged in account."
-    me: UserResponse!
+    me: User!
   }
 `;

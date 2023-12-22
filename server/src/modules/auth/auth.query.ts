@@ -1,15 +1,10 @@
-import { QueryResolvers, ResponseCode } from "@/__generated__/gql";
-import { errors } from "@/modules/root";
+import { QueryResolvers } from "@/__generated__/gql";
+import { UnauthenticatedError } from "@/errors";
 
 export const queries: QueryResolvers = {
   me: (_, __, { session }) => {
-    if (!session.user) return { ...errors.UNAUTHENTICATED, user: null };
+    if (!session.user) throw new UnauthenticatedError();
 
-    return {
-      code: ResponseCode.Ok,
-      success: true,
-      message: "Queried successfully!",
-      user: session.user,
-    };
+    return session.user;
   },
 };

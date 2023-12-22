@@ -7,20 +7,23 @@ import { createServer } from "http";
 import type { AddressInfo } from "net";
 
 import { ApolloServer } from "@apollo/server";
+import { unwrapResolverError } from "@apollo/server/errors";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { PubSub } from "graphql-subscriptions";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { WebSocketServer } from "ws";
 
 import * as config from "@/config";
 import { connection as pgsqlClient } from "@/database";
+import { InternalServerError } from "@/errors";
+import { GraphQLContext } from "@/types";
+
 import * as auth from "@/modules/auth";
 import * as message from "@/modules/messages";
 import * as root from "@/modules/root";
-import { GraphQLContext } from "@/types";
-import { PubSub } from "graphql-subscriptions";
 
 const app = express();
 const httpServer = createServer(app);
@@ -69,6 +72,13 @@ const wsServerCleanup = useServer({ schema }, wsServer);
 
 const server = new ApolloServer<GraphQLContext>({
   schema,
+  formatError(formattedError, error) {
+    if (unwrapResolverError(error) instanceof InternalServerError) {
+      console.log(unwrapResolverError(error));
+    }
+
+    return formattedError;
+  },
   plugins: [
     ApolloServerPluginDrainHttpServer({ httpServer }),
     {
