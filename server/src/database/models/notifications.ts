@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { json, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+import { json, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { users } from "./users";
 
@@ -8,7 +8,8 @@ export const notifications = pgTable("notifications", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id),
-  content: json("content").notNull(),
+  message: text("message").notNull(),
+  metadata: json("metadata").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   seened_at: timestamp("seened_at"),
 });
