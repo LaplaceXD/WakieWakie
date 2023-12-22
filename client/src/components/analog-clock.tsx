@@ -33,9 +33,18 @@ function AnalogClock({ seconds, minutes, hours }) {
           id="analog-center"
           className="bg-peach-200 absolute z-40 aspect-square w-4 rounded-full border-2 border-yellow-200"
         ></div>
-        <div className="z-30 absolute w-2 h-32 bg-gradient-to-t bottom-1/2 origin-bottom rounded-full" style={{ transform: `rotate(${seconds}deg)` }}></div>
-        <div className="absolute w-4 h-28 bg-peach-200 bottom-1/2 origin-bottom rounded-full" style={{ transform: `rotate(${minutes}deg)` }}></div>
-        <div className="absolute w-4 h-24 bg-peach-200 bottom-1/2 origin-bottom rounded-full" style={{ transform: `rotate(${hours}deg)` }}></div>
+        <div
+          className="absolute bottom-1/2 z-30 h-32 w-2 origin-bottom rounded-full bg-gradient-to-t"
+          style={{ transform: `rotate(${seconds}deg)` }}
+        ></div>
+        <div
+          className="bg-peach-200 absolute bottom-1/2 h-28 w-4 origin-bottom rounded-full"
+          style={{ transform: `rotate(${minutes}deg)` }}
+        ></div>
+        <div
+          className="bg-peach-200 absolute bottom-1/2 h-24 w-4 origin-bottom rounded-full"
+          style={{ transform: `rotate(${hours}deg)` }}
+        ></div>
       </div>
     </div>
   );

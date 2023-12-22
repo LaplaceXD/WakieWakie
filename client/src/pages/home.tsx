@@ -25,7 +25,12 @@ function Home() {
   const minutesRotation = ((minutes + seconds / 60) / 60) * 360;
   const hoursRotation = (((hours % 12) + minutes / 60) / 12) * 360;
 
-  const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+  const formattedTime = time.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
 
   return (
     <div className="flex w-screen bg-gradient-to-br from-neutral-100 via-sky-50 to-sky-100">
@@ -38,8 +43,8 @@ function Home() {
           <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} time={time} />
         )}
         {clock === "digital" && (
-          <div>
-            <span className="text-8xl">{formattedTime}</span>
+          <div className="mt-40">
+            <span className="text-8xl font-bold text-pink-200">{formattedTime}</span>
           </div>
         )}
       </div>
