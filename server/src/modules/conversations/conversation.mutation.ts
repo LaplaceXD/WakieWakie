@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
 import { conversationUsers, conversations, db } from "@/database";
@@ -63,6 +63,62 @@ const mutations: MutationResolvers = {
     } catch (err) {
       throw new InternalServerError(err as Error);
     }
+  },
+  setConversationMute: async (_, { conversationId, isMuted }, { session }) => {
+    if (!session.user) throw new UnauthenticatedError();
+
+    const updatedPreferences = await db
+      .update(conversationUsers)
+      .set({ isMuted })
+      .where(and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)))
+      .returning();
+    if (updatedPreferences.length === 0) {
+      return {
+        code: ResponseCode.NotFound,
+        success: false,
+        message: "Conversation does not exist.",
+        conversation: null,
+      };
+    }
+
+    const conversation = await db.query.conversations.findFirst({
+      where: ({ id }, { eq }) => eq(id, conversationId),
+    });
+
+    return {
+      code: ResponseCode.Ok,
+      success: true,
+      message: "Conversation muted successfully.",
+      conversation,
+    };
+  },
+  setConversationBlock: async (_, { conversationId, isBlocked }, { session }) => {
+    if (!session.user) throw new UnauthenticatedError();
+
+    const updatedPreferences = await db
+      .update(conversationUsers)
+      .set({ isBlocked })
+      .where(and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)))
+      .returning();
+    if (updatedPreferences.length === 0) {
+      return {
+        code: ResponseCode.NotFound,
+        success: false,
+        message: "Conversation does not exist.",
+        conversation: null,
+      };
+    }
+
+    const conversation = await db.query.conversations.findFirst({
+      where: ({ id }, { eq }) => eq(id, conversationId),
+    });
+
+    return {
+      code: ResponseCode.Ok,
+      success: true,
+      message: "Conversation blocked successfully.",
+      conversation,
+    };
   },
 };
 

@@ -30,11 +30,11 @@ export const conversationUsers = pgTable(
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
-  usersToConversations: many(conversationUsers),
+  conversations: many(conversationUsers),
 }));
 
 export const conversationsRelations = relations(conversations, ({ many }) => ({
-  usersToConversations: many(conversationUsers),
+  conversationUsers: many(conversationUsers),
 }));
 
 export const conversationUsersRelations = relations(conversationUsers, ({ one }) => ({

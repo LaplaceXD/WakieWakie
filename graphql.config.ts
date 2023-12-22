@@ -17,6 +17,7 @@ export default {
         mappers: {
           User: "../database#UserModel",
           Conversation: "../database#ConversationModel",
+          ConversationUser: "../database#ConversationUserModel",
         },
       },
     },
