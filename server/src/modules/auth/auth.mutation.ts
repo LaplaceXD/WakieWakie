@@ -9,7 +9,7 @@ import { hash, parseZodErrors } from "@/utils";
 import { userSchema } from "./auth.validation";
 
 const mutations: MutationResolvers = {
-  loginUser: async (_, { username, password }, { session }) => {
+  loginAccount: async (_, { username, password }, { session }) => {
     if (session.user) {
       return {
         code: ResponseCode.BadRequest,
@@ -59,7 +59,7 @@ const mutations: MutationResolvers = {
       throw new InternalServerError(err as Error);
     }
   },
-  registerUser: async (_, { userDetails }) => {
+  registerAccount: async (_, { userDetails }) => {
     const validated = await userSchema.safeParseAsync(userDetails);
     if (!validated.success) {
       return {
@@ -98,18 +98,46 @@ const mutations: MutationResolvers = {
       throw new InternalServerError(err as Error);
     }
   },
-  logoutUser: async (_, __, { session }) => {
+  logoutAccount: async (_, __, { session }) => {
     if (!session.user) throw new UnauthenticatedError();
 
-    const user = session.user;
-    await new Promise((resolve, reject) => session.destroy(err => (err ? reject(err) : resolve(true))));
+    try {
+      const user = session.user;
+      await new Promise((resolve, reject) => session.destroy(err => (err ? reject(err) : resolve(true))));
 
-    return {
-      code: ResponseCode.Ok,
-      success: true,
-      message: "Logged out successfully!",
-      user,
-    };
+      return {
+        code: ResponseCode.Ok,
+        success: true,
+        message: "Logged out successfully!",
+        user,
+      };
+    } catch (err) {
+      throw new InternalServerError(err as Error);
+    }
+  },
+  deleteAccount: async (_, __, { session }) => {
+    if (!session.user) throw new UnauthenticatedError();
+
+    try {
+      const user = session.user;
+      const [authAccount] = await db
+        .update(auth)
+        .set({ deletedAt: sql`now()` })
+        .where(eq(auth.id, user.id))
+        .returning();
+      if (!authAccount) throw new Error(`User ${auth.id} does not have a corresponding profile.`);
+
+      await new Promise((resolve, reject) => session.destroy(err => (err ? reject(err) : resolve(true))));
+
+      return {
+        code: ResponseCode.Ok,
+        success: true,
+        message: "Deleted successfully!",
+        user,
+      };
+    } catch (err) {
+      throw new InternalServerError(err as Error);
+    }
   },
 };
 

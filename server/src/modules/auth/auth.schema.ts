@@ -91,16 +91,18 @@ export const typeDefs = gql`
 
   type Mutation {
     "Register an account to the system."
-    registerUser(userDetails: RegisterInput!): UserResponse!
+    registerAccount(userDetails: RegisterInput!): UserResponse!
     "Login a registered account."
-    loginUser(
+    loginAccount(
       "The username (or email) of the user."
       username: String!
       "The password of the user."
       password: String!
     ): UserResponse!
     "Logs out the currently logged in account."
-    logoutUser: UserResponse!
+    logoutAccount: UserResponse!
+    "Deletes an account from the system. This can still be recovered if the user wishes to do so."
+    deleteAccount: UserResponse!
   }
 
   type Query {
