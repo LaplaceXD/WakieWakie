@@ -1,5 +1,3 @@
-import AnalogHand from "@/components/analog-hand";
-
 function AnalogClock({ seconds, minutes, hours }) {
   const numbers = Array.from({ length: 12 }, (_, index) => index + 1);
 
@@ -35,9 +33,9 @@ function AnalogClock({ seconds, minutes, hours }) {
           id="analog-center"
           className="bg-peach-200 absolute z-40 aspect-square w-4 rounded-full border-2 border-yellow-200"
         ></div>
-        <AnalogHand rotation={seconds} w={2} h={32} z="z-30" color="gradient-to-t" />
-        <AnalogHand rotation={minutes} w={4} h={28} z="" color="peach-200" />
-        <AnalogHand rotation={hours} w={4} h={24} z="" color="peach-200" />
+        <div className="z-30 absolute w-2 h-32 bg-gradient-to-t bottom-1/2 origin-bottom rounded-full" style={{ transform: `rotate(${seconds}deg)` }}></div>
+        <div className="absolute w-4 h-28 bg-peach-200 bottom-1/2 origin-bottom rounded-full" style={{ transform: `rotate(${minutes}deg)` }}></div>
+        <div className="absolute w-4 h-24 bg-peach-200 bottom-1/2 origin-bottom rounded-full" style={{ transform: `rotate(${hours}deg)` }}></div>
       </div>
     </div>
   );
