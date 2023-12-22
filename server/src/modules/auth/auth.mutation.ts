@@ -8,7 +8,7 @@ import { hash, parseZodErrors } from "@/utils";
 
 import { userSchema } from "./auth.validation";
 
-export const mutations: MutationResolvers = {
+const mutations: MutationResolvers = {
   loginUser: async (_, { username, password }, { session }) => {
     if (session.user) {
       return {
@@ -112,3 +112,5 @@ export const mutations: MutationResolvers = {
     };
   },
 };
+
+export default mutations;

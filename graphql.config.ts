@@ -8,7 +8,7 @@ export default {
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         useIndexSignature: true,
-        contextType: "../types#GraphQLContext",
+        contextType: "../modules/context#GraphQLContext",
         scalars: {
           DateTime: { input: "Date | string | number", output: "Date | string | number" },
           Timetz: { input: "string", output: "string" },

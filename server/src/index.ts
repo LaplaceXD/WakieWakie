@@ -11,19 +11,20 @@ import { unwrapResolverError } from "@apollo/server/errors";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 
+import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { PubSub } from "graphql-subscriptions";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { WebSocketServer } from "ws";
 
+import * as auth from "@/modules/auth";
+import type { GraphQLContext } from "@/modules/context";
+import * as message from "@/modules/messages";
+import * as root from "@/modules/root";
+
 import * as config from "@/config";
 import { connection as pgsqlClient } from "@/database";
 import { InternalServerError } from "@/errors";
-import { GraphQLContext } from "@/types";
-
-import * as auth from "@/modules/auth";
-import * as message from "@/modules/messages";
-import * as root from "@/modules/root";
 
 const app = express();
 const httpServer = createServer(app);
@@ -45,22 +46,8 @@ if (process.env["NODE_ENV"] !== "production") {
 }
 
 const schema = makeExecutableSchema({
-  typeDefs: [root.typeDefs, auth.typeDefs, message.typeDefs],
-  resolvers: {
-    ...root.resolvers,
-    ...auth.resolvers,
-    Query: {
-      ...root.queries,
-      ...auth.queries,
-    },
-    Mutation: {
-      ...auth.mutations,
-      ...message.mutations,
-    },
-    Subscription: {
-      ...message.subscriptions,
-    },
-  },
+  typeDefs: mergeTypeDefs([root.typeDefs, auth.typeDefs, message.typeDefs]),
+  resolvers: mergeResolvers([root.resolvers, auth.resolvers, message.resolvers]),
 });
 
 const wsServer = new WebSocketServer({

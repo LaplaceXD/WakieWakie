@@ -2,7 +2,12 @@ import { Resolvers } from "@/__generated__/gql";
 import { db } from "@/database";
 import { InternalServerError } from "@/errors";
 
+import Mutation from "./auth.mutation";
+import Query from "./auth.query";
+
 export const resolvers: Resolvers = {
+  Query,
+  Mutation,
   User: {
     account: async ({ id }) => {
       try {

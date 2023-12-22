@@ -1,7 +1,7 @@
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
 import { randomUUID } from "crypto";
 
-export const mutations: MutationResolvers = {
+const mutations: MutationResolvers = {
   sendMessage: async (_, { content }, { pubsub }) => {
     const msg = {
       id: randomUUID(),
@@ -20,3 +20,5 @@ export const mutations: MutationResolvers = {
     };
   },
 };
+
+export default mutations;

@@ -1,3 +1,2 @@
-export * from "./message.mutation";
+export * from "./message.resolver";
 export * from "./message.schema";
-export * from "./message.subscription";
