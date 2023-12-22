@@ -11,8 +11,8 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 
 import * as config from "@/config";
 import { connection } from "@/database";
+import * as auth from "@/modules/auth";
 import * as root from "@/modules/root";
-import * as users from "@/modules/users";
 import { GraphQLContext } from "./types";
 
 const app = express();
@@ -35,16 +35,16 @@ if (process.env["NODE_ENV"] !== "production") {
 }
 
 const server = new ApolloServer<GraphQLContext>({
-  typeDefs: [root.typeDefs, users.typeDefs],
+  typeDefs: [root.typeDefs, auth.typeDefs],
   resolvers: {
     ...root.resolvers,
-    ...users.resolvers,
+    ...auth.resolvers,
     Query: {
       ...root.queries,
-      ...users.queries,
+      ...auth.queries,
     },
     Mutation: {
-      ...users.mutations,
+      ...auth.mutations,
     },
   },
   plugins: [

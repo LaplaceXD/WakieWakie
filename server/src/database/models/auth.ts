@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
+import { AccountStatus } from "@/__generated__/gql";
 import { users } from "./users";
 
 export const auth = pgTable("auth", {
@@ -13,7 +14,8 @@ export const auth = pgTable("auth", {
   password: varchar("password").notNull(),
   status: varchar("status", { length: 12, enum: ["ACTIVE", "DEACTIVATED", "DELETED", "BANNED"] })
     .default("ACTIVE")
-    .notNull(),
+    .notNull()
+    .$type<AccountStatus>(),
   lastLogin: timestamp("last_login"),
 });
 

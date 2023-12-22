@@ -8,7 +8,7 @@ import { auth, db, users } from "@/database";
 import { errors } from "@/modules/root";
 import { hash, parseZodErrors } from "@/utils";
 
-import { userSchema } from "./users.validation";
+import { userSchema } from "./auth.validation";
 
 export const mutations: MutationResolvers = {
   loginUser: async (_, { username, password }, { session }) => {

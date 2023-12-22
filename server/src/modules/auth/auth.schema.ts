@@ -15,16 +15,6 @@ export const typeDefs = gql`
     EVERYONE
   }
 
-  "The auth information of a given user."
-  type Auth {
-    "The email of the user."
-    email: String!
-    "The username of the user"
-    username: String!
-    "The date when the user last logged in."
-    lastLogin: DateTime
-  }
-
   "The user schema."
   type User {
     "The user's ID in the database."
@@ -49,8 +39,34 @@ export const typeDefs = gql`
     createdAt: DateTime!
     "The date the user was updated."
     updatedAt: DateTime
-    "The auth information of a given user."
-    auth: Auth!
+    "The account details of the user, such as their authentication information."
+    account: Account!
+  }
+
+  "The status of the account."
+  enum AccountStatus {
+    "User is currently active."
+    ACTIVE
+    "User has deactivated their account and is awaitined deletion."
+    DEACTIVATED
+    "Account has been successfully deleted."
+    DELETED
+    "Account was banned due to various reasons."
+    BANNED
+  }
+
+  "The account information of a given user."
+  type Account {
+    "The account's ID in the database."
+    id: ID!
+    "The email of the user."
+    email: String!
+    "The username of the user"
+    username: String!
+    "The status of the account."
+    status: AccountStatus!
+    "The date when the user last logged in."
+    lastLogin: DateTime
   }
 
   "The set of inputs required for registering a user."
@@ -79,7 +95,7 @@ export const typeDefs = gql`
     alarmTime: Timetz!
   }
 
-  "Response object containing a user object."
+  "Response object containing the user object."
   type UserResponse implements Response {
     code: ResponseCode!
     success: Boolean!
@@ -88,21 +104,21 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    "Register a user."
+    "Register an account to the system."
     registerUser(userDetails: RegisterInput!): UserResponse!
-    "Login a registered user."
+    "Login a registered account."
     loginUser(
       "The username (or email) of the user."
       username: String!
       "The password of the user."
       password: String!
     ): UserResponse!
-    "Logs out the currently logged in user."
+    "Logs out the currently logged in account."
     logoutUser: UserResponse!
   }
 
   type Query {
-    "Get the currently logged in user."
+    "Get the currently logged in account."
     me: UserResponse!
   }
 `;
