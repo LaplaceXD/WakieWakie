@@ -5,6 +5,8 @@ import express from "express";
 import session from "express-session";
 import { createServer } from "http";
 import type { AddressInfo } from "net";
+import { Redis } from "ioredis";
+import RedisStore from "connect-redis";
 
 import { ApolloServer } from "@apollo/server";
 import { unwrapResolverError } from "@apollo/server/errors";
@@ -30,17 +32,32 @@ import { InternalServerError } from "@/errors";
 
 const app = express();
 const httpServer = createServer(app);
-const sessionParser = session(config.session);
+const sessionParser = session({
+  ...config.session,
+  ...(process.env["REDIS_CONNECTION"]
+    ? {
+        store: new RedisStore({
+          client: new Redis(process.env["REDIS_CONNECTION"], {
+            tls: {
+              rejectUnauthorized: false,
+            },
+          }),
+          prefix: "session:",
+        }),
+      }
+    : {}),
+});
 
 app.use(express.json());
 app.use(cors(config.cors));
 app.use(sessionParser);
 
+// trust x-forwarded-* headers
+app.set("trust proxy", 1);
+
 // This setting is required for graphiql playground
 // to work with cookies in development environments
 if (process.env["NODE_ENV"] !== "production") {
-  // trust x-forwarded-* headers
-  app.set("trust proxy", 1);
   // set x-forward-proto to simulate a secure http connection
   app.use((req, _, next) => {
     req.headers["x-forwarded-proto"] = "https";
