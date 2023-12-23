@@ -108,5 +108,7 @@ export const typeDefs = gql`
   type Query {
     "Get the currently logged in account."
     me: User!
+    "Get all the users in the database."
+    users: [User!]!
   }
 `;

@@ -19,6 +19,8 @@ export const typeDefs = gql`
   type Message {
     "The id of the message."
     id: ID!
+    "The id of the conversation that the message is part of."
+    conversationId: ID!
     "The user that sent the message."
     sender: User!
     "The content of the message."
@@ -70,6 +72,6 @@ export const typeDefs = gql`
     "Subscribe to the messages of a given conversation."
     conversationMessages(conversationId: ID!): MessagePayload!
     "Subscribe to all messages sent to your account, you can put up an excluded list of conversation IDs."
-    userMessages(excludeIds: [ID!]): MessagePayload!
+    userMessages(excludeIds: [ID]): MessagePayload!
   }
 `;

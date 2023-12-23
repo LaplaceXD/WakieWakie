@@ -21,6 +21,8 @@ export const typeDefs = gql`
     createdAt: DateTime!
     "The number of messages that have not been seen."
     unseened: Int!
+    "The last message sent within the conversation."
+    recentMessage: Message
     "The users within the conversation."
     users: [User!]!
     "The type of conversation."

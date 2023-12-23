@@ -9,6 +9,14 @@ import { publishNotification } from "../notifications";
 const mutations: MutationResolvers = {
   createConversation: async (_, { userId }, { session, pubsub }) => {
     if (!session.user) throw new UnauthenticatedError();
+    else if (userId === session.user!.id) {
+      return {
+        code: ResponseCode.BadRequest,
+        success: false,
+        message: "You can't send a message to youself.",
+        conversation: null,
+      };
+    }
 
     const [conversee] = await db.select().from(users).where(eq(users.id, userId));
     if (!conversee) {

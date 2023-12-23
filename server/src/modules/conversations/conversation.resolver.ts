@@ -1,6 +1,6 @@
 import { ConversationType, Resolvers } from "@/__generated__/gql";
 import { conversationMetadata, db, messageMetadata, messages, users } from "@/database";
-import { and, eq, inArray, isNull, ne, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, ne, desc, sql } from "drizzle-orm";
 
 import { UnauthenticatedError } from "@/errors";
 import Mutation from "./conversation.mutation";
@@ -38,6 +38,16 @@ export const resolvers: Resolvers = {
         .where(and(inArray(messageMetadata.messageId, receivedConvoMessages), isNull(messageMetadata.seenedAt)));
 
       return results[0]?.unseened ?? 0;
+    },
+    recentMessage: async ({ id }) => {
+      const [recentMessage] = await db
+        .select()
+        .from(messages)
+        .where(eq(messages.conversationId, id))
+        .orderBy(desc(messages.sentAt))
+        .limit(1);
+
+      return recentMessage || null;
     },
     type: async ({ id }, _, { session }) => {
       if (!session.user) throw new UnauthenticatedError();

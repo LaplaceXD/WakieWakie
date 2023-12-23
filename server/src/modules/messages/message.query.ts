@@ -26,7 +26,7 @@ const queries: QueryResolvers = {
     const nonDeletedMessages = db
       .select({ messageId: messageMetadata.messageId })
       .from(messageMetadata)
-      .where(isNull(messageMetadata.deletedAt));
+      .where(and(isNull(messageMetadata.deletedAt), eq(messageMetadata.userId, session.user!.id)));
 
     return db
       .select()
