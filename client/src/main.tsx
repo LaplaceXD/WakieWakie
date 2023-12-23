@@ -9,6 +9,8 @@ import Ping from "@/components/ping";
 import Error from "@/pages/error";
 import Messages from "@/pages/messages";
 import App from "./App.tsx";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,16 @@ const router = createBrowserRouter([
         element: <Messages />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <Error />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+    errorElement: <Error />,
   },
 ]);
 

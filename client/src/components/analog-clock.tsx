@@ -8,11 +8,11 @@ function AnalogClock({ seconds, minutes, hours, loading }) {
   return (
     <>
       {loading ? (
-          <ShimmerSkeleton style="aspect-square w-8/12 min-w-80 rounded-full" />
+        <ShimmerSkeleton style="aspect-square w-8/12 min-w-80 rounded-full" />
       ) : (
         <div
           id="analog-clock"
-          className="via-peach-200 flex aspect-square w-8/12 min-w-80 items-center justify-center rounded-full bg-gradient-to-t from-yellow-200 to-pink-200"
+          className="flex aspect-square w-8/12 min-w-80 items-center justify-center rounded-full bg-gradient-to-t from-yellow-200 via-peach-200 to-pink-200"
         >
           <div
             id="analog-face"

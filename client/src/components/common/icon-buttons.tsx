@@ -8,7 +8,7 @@ function IconButtons({ onClick, icon: IconComponent, loading }) {
       ) : (
         <button
           onClick={onClick}
-          className="bg-peach-100 text-peach-200 hover:bg-peach-200 hover:text-peach-100 mx-8 flex size-20 items-center justify-center rounded-full duration-150 ease-in-out"
+          className="mx-8 flex size-20 items-center justify-center rounded-full bg-peach-100 text-peach-200 duration-150 ease-in-out hover:bg-peach-200 hover:text-peach-100"
         >
           <IconComponent className=" size-10" />
         </button>

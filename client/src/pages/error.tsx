@@ -5,7 +5,7 @@ export default function Error() {
   console.error(error);
 
   return (
-    <div id="error-page"className="h-screen flex flex-col items-center justify-center">
+    <div id="error-page" className="flex h-screen flex-col items-center justify-center">
       <h1>Oops!</h1>
       <p>Looks like you have a problem!</p>
       <p className="mt-4">

@@ -11,7 +11,6 @@ function Display({ messages, user }) {
     setDisplayUser(!displayUser);
   };
 
-
   return (
     <div className="flex h-full">
       <div className="flex w-full flex-col justify-between">
