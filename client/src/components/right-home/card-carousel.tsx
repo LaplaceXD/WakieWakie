@@ -1,7 +1,7 @@
 import { IoFemale, IoMale, IoMaleFemaleOutline } from "react-icons/io5";
 import { LuMapPin } from "react-icons/lu";
 
-function CardMatches({ key, image, name, age, gender, bio, location, index, currentIndex }) {
+function CardCarousel({ key, image, name, age, gender, bio, location, index, currentIndex }) {
   return (
     <div
       key={key}
@@ -37,4 +37,4 @@ function CardMatches({ key, image, name, age, gender, bio, location, index, curr
   );
 }
 
-export default CardMatches;
+export default CardCarousel;

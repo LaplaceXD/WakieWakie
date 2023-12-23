@@ -1,7 +1,7 @@
 import { useState } from "react";
-import IconButtons from "@/components/icon-buttons";
+import IconButtons from "@/components/common/icon-buttons";
 import { LuMail, LuX } from "react-icons/lu";
-import CardMatches from "@/components/card-matches";
+import CardCarousel from "@/components/right-home/card-carousel";
 
 import CoolSenku from "@/assets/test-media/ishigamiSenku.png";
 import Me from "@/assets/test-media/logo.png";
@@ -9,7 +9,7 @@ import ChibiCale from "@/assets/test-media/chibi-cale.png";
 import ChibiSenku from "@/assets/test-media/chibi-senku.png";
 import ShimmerCard from "@/components/shimmer/shimmer-card";
 
-function CarouselMatches({ loading }) {
+function Carousel({ loading }) {
   const cards = [
     {
       id: 1,
@@ -61,17 +61,12 @@ function CarouselMatches({ loading }) {
 
   return (
     <>
-      <div className="mb-12 flex flex-col items-center">
-        <span className="text-6xl font-bold text-pink-200">It's time to Wakie Wakie!</span>
-        <span className="my-4 text-neutral-200">You woke up with this people</span>
-      </div>
-
       {loading ? (
         <ShimmerCard />
       ) : (
         <div className="flex h-1/2 w-7/12 overflow-hidden">
           {cards.map((card, index) => (
-            <CardMatches
+            <CardCarousel
               key={card.id}
               image={card.image}
               name={card.name}
@@ -93,4 +88,4 @@ function CarouselMatches({ loading }) {
   );
 }
 
-export default CarouselMatches;
+export default Carousel;

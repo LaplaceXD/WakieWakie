@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
 
 import AnalogClock from "@/components/analog-clock";
-import Buttons from "@/components/buttons";
-import CarouselMatches from "@/components/carousel-matches";
+import Buttons from "@/components/common/buttons";
+import RightDisplay from "@/components/right-home/right-display";
 
 function Home() {
-  const shimmerStyle = "animate-pulse bg-gray-200 inline-block";
-
   const [clock, setClock] = useState("analog");
   const [time, setTime] = useState(new Date());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading delay (you can remove this in a real scenario)
     const delay = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
 
-    return () => clearTimeout(delay); // Cleanup on component unmount
+    return () => clearTimeout(delay);
   }, []);
 
   useEffect(() => {
@@ -50,19 +47,32 @@ function Home() {
       <div id="clock-container" className="flex w-1/2 flex-col items-center">
         <div className="my-20">
           <Buttons isActive={clock === "analog"} label="Analog" onClick={() => setClock("analog")} loading={loading} />
-          <Buttons isActive={clock === "digital"} label="Digital" onClick={() => setClock("digital")} loading={loading} />
+          <Buttons
+            isActive={clock === "digital"}
+            label="Digital"
+            onClick={() => setClock("digital")}
+            loading={loading}
+          />
         </div>
         {clock === "analog" && (
-            <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} time={time} loading={loading} />
+          <AnalogClock
+            seconds={secondsRotation}
+            minutes={minutesRotation}
+            hours={hoursRotation}
+            time={time}
+            loading={loading}
+          />
         )}
         {clock === "digital" && (
           <div className="mt-40">
-            <span className="text-8xl font-bold bg-gradient-to-r from-yellow-200 via-peach-200 to-pink-200 bg-clip-text text-transparent">{formattedTime}</span>
+            <span className="via-peach-200 bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-8xl font-bold text-transparent">
+              {formattedTime}
+            </span>
           </div>
         )}
       </div>
       <div id="card-container" className="flex flex-col items-center justify-center">
-        <CarouselMatches loading={loading} />
+        <RightDisplay loading={loading} />
       </div>
     </div>
   );

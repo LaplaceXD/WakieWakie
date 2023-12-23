@@ -7,8 +7,8 @@ export default function Error() {
   return (
     <div id="error-page"className="h-screen flex flex-col items-center justify-center">
       <h1>Oops!</h1>
-      <p>Sorry! This page doesn't exist yet!</p>
-      <p>
+      <p>Looks like you have a problem!</p>
+      <p className="mt-4">
         <i>{error.statusText || error.message}</i>
       </p>
     </div>
