@@ -18,14 +18,19 @@
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
+    "@graphql-tools/merge": "^9.0.1",
+    "@graphql-tools/schema": "^10.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "drizzle-orm": "^0.29.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "graphql": "^16.8.1",
+    "graphql-subscriptions": "^2.0.0",
     "graphql-tag": "^2.12.6",
+    "graphql-ws": "^5.14.3",
     "postgres": "^3.4.3",
+    "ws": "^8.15.1",
     "zod": "^3.22.4"
   }
 }

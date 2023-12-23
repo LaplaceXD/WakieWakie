@@ -5,13 +5,17 @@ export const typeDefs = gql`
   scalar JSON
   scalar DateTime
 
+  "There are the possible events in the system."
+  enum Events {
+    NOTIFICATION
+  }
+
   "These are the possible response codes returned from a response."
   enum ResponseCode {
     OK
     BAD_USER_INPUT
     BAD_REQUEST
-    UNAUTHENTICATED
-    FORBIDDEN
+    NOT_FOUND
   }
 
   "Base interface for responses."

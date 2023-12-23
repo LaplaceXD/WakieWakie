@@ -1,5 +1,7 @@
 import { QueryResolvers } from "@/__generated__/gql";
 
-export const queries: QueryResolvers = {
+const queries: QueryResolvers = {
   ping: () => "PONG!",
 };
+
+export default queries;

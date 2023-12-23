@@ -15,16 +15,6 @@ export const typeDefs = gql`
     EVERYONE
   }
 
-  "The auth information of a given user."
-  type Auth {
-    "The email of the user."
-    email: String!
-    "The username of the user"
-    username: String!
-    "The date when the user last logged in."
-    lastLogin: DateTime
-  }
-
   "The user schema."
   type User {
     "The user's ID in the database."
@@ -49,8 +39,20 @@ export const typeDefs = gql`
     createdAt: DateTime!
     "The date the user was updated."
     updatedAt: DateTime
-    "The auth information of a given user."
-    auth: Auth!
+    "The account details of the user, such as their authentication information."
+    account: Account!
+  }
+
+  "The account information of a given user."
+  type Account {
+    "The account's ID in the database."
+    id: ID!
+    "The email of the user."
+    email: String!
+    "The username of the user"
+    username: String!
+    "The date when the user last logged in."
+    lastLogin: DateTime
   }
 
   "The set of inputs required for registering a user."
@@ -79,7 +81,7 @@ export const typeDefs = gql`
     alarmTime: Timetz!
   }
 
-  "Response object containing a user object."
+  "Response object containing the user object."
   type UserResponse implements Response {
     code: ResponseCode!
     success: Boolean!
@@ -88,21 +90,23 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    "Register a user."
-    registerUser(userDetails: RegisterInput!): UserResponse!
-    "Login a registered user."
-    loginUser(
+    "Register an account to the system."
+    registerAccount(userDetails: RegisterInput!): UserResponse!
+    "Login a registered account."
+    loginAccount(
       "The username (or email) of the user."
       username: String!
       "The password of the user."
       password: String!
     ): UserResponse!
-    "Logs out the currently logged in user."
-    logoutUser: UserResponse!
+    "Logs out the currently logged in account."
+    logoutAccount: UserResponse!
+    "Deletes an account from the system. This can still be recovered if the user wishes to do so."
+    deleteAccount: UserResponse!
   }
 
   type Query {
-    "Get the currently logged in user."
-    me: UserResponse!
+    "Get the currently logged in account."
+    me: User!
   }
 `;

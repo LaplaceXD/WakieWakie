@@ -12,12 +12,13 @@ A dating app that aims to match people nearby based on the time they wake up. Th
 1. Clone this repository.
 2. Go into the directory using `cd WakieWakie`.
 3. Install the necessary dependencies using `yarn`.
-4. Ensure that the necessary environment variables are configured on your local machine, check the [ENV](#env) section.
-5. Run the migrations on the database using `yarn db:migrate`.
-6. Run the app locally using `yarn dev`.
+4. Create an empty database in `PostgreSQL`. This will be used later on for migrations, make sure to use the name of this database for the `server/.env` config.
+5. Configure the necessary environment variables on your local machine, check the [ENV](#env) section.
+6. Run the migrations on the database using `yarn db:migrate`.
+7. Run the app locally using `yarn dev`.
    > This runs the client at `http://localhost:5173`, and the server at `http://localhost:4000`.
-7. Open the web app on your desired browser using the URL above.
-   > If you want to test out the server via the `GraphQL Explorer`, you can head over to `http://localhost:4000/graphql`
+8. Open the web app on your desired browser using the URL above.
+   > If you want to test out the server via the `Apollo GraphQL Explorer`, you can head over to `http://localhost:4000/graphql`. Make sure to enable the [cookies setting](https://community.apollographql.com/t/allow-cookies-to-be-sent-alongside-request/920/7).
 
 ## ENV
 

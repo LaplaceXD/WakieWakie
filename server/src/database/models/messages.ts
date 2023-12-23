@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { conversations } from "./conversations";
@@ -14,23 +13,7 @@ export const messages = pgTable("messages", {
     .references(() => users.id),
   content: text("content").notNull().default(""),
   sentAt: timestamp("sent_at").notNull().defaultNow(),
-  receivedAt: timestamp("received_at"),
-  seenedAt: timestamp("seened_at"),
-  deletedAt: timestamp("deleted_at"),
   updatedAt: timestamp("updated_at"),
 });
-
-export const userMessages = relations(users, ({ many }) => ({
-  messages: many(messages),
-}));
-
-export const conversationMessages = relations(conversations, ({ many }) => ({
-  messages: many(messages),
-}));
-
-export const messageRelations = relations(messages, ({ one }) => ({
-  conversation: one(conversations),
-  user: one(users),
-}));
 
 export type MessageModel = typeof messages.$inferSelect;

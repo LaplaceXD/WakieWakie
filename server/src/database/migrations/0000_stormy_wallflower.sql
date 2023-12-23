@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "auth" (
 	"email" varchar(256) NOT NULL,
 	"username" varchar(256) NOT NULL,
 	"password" varchar NOT NULL,
-	"status" varchar(12) DEFAULT 'ACTIVE' NOT NULL,
+	"deleted_at" timestamp,
 	"last_login" timestamp,
 	CONSTRAINT "unique_email" UNIQUE("email"),
 	CONSTRAINT "unique_username" UNIQUE("username")
@@ -20,28 +20,42 @@ CREATE TABLE IF NOT EXISTS "completed_routines" (
 	"routine_id" uuid NOT NULL,
 	"completer_id" uuid NOT NULL,
 	"completed_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT completed_routines_routine_id_completer_id_pk PRIMARY KEY("routine_id","completer_id")
+	CONSTRAINT "completed_routines_routine_id_completer_id_pk" PRIMARY KEY("routine_id","completer_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "conversations" (
 	"conversation_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"creator_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "conversation_users" (
+CREATE TABLE IF NOT EXISTS "conversation_metadata" (
 	"conversation_id" uuid NOT NULL,
 	"user_id" uuid NOT NULL,
 	"invited_at" timestamp DEFAULT now() NOT NULL,
 	"accepted_at" timestamp,
 	"is_muted" boolean DEFAULT false NOT NULL,
 	"is_blocked" boolean DEFAULT false NOT NULL,
-	CONSTRAINT conversation_users_conversation_id_user_id_pk PRIMARY KEY("conversation_id","user_id")
+	CONSTRAINT "conversation_metadata_conversation_id_user_id_pk" PRIMARY KEY("conversation_id","user_id")
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "messages" (
+	"message_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"conversation_id" uuid NOT NULL,
+	"sender_id" uuid NOT NULL,
+	"content" text DEFAULT '' NOT NULL,
+	"sent_at" timestamp DEFAULT now() NOT NULL,
+	"received_at" timestamp,
+	"seened_at" timestamp,
+	"deleted_at" timestamp,
+	"updated_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "notifications" (
 	"notification_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" uuid NOT NULL,
-	"content" json NOT NULL,
+	"message" text NOT NULL,
+	"metadata" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"seened_at" timestamp
 );
@@ -77,25 +91,6 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "messages" (
-	"message_id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"conversation_id" uuid NOT NULL,
-	"sender_id" uuid NOT NULL,
-	"content" text DEFAULT '' NOT NULL,
-	"sent_at" timestamp DEFAULT now() NOT NULL,
-	"received_at" timestamp,
-	"seened_at" timestamp,
-	"deleted_at" timestamp,
-	"updated_at" timestamp
-);
---> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "email_idx" ON "auth" ("email");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "username_idx" ON "auth" ("username");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "name_idx" ON "routines" ("name");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "gender_idx" ON "users" ("gender");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "interest_idx" ON "users" ("interest");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "alarm_time_idx" ON "users" ("alarm_time");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "location_idx" ON "users" ("city","country");--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "attachments" ADD CONSTRAINT "attachments_messageId_messages_message_id_fk" FOREIGN KEY ("messageId") REFERENCES "messages"("message_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
@@ -121,13 +116,31 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "conversation_users" ADD CONSTRAINT "conversation_users_conversation_fk" FOREIGN KEY ("conversation_id") REFERENCES "conversations"("conversation_id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "conversations" ADD CONSTRAINT "conversations_creator_id_users_user_id_fk" FOREIGN KEY ("creator_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "conversation_users" ADD CONSTRAINT "conversation_users_users_fk" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "conversation_metadata" ADD CONSTRAINT "conversation_metadata_conversation_fk" FOREIGN KEY ("conversation_id") REFERENCES "conversations"("conversation_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "conversation_metadata" ADD CONSTRAINT "conversation_metadata_users_fk" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "messages" ADD CONSTRAINT "messages_conversation_id_conversations_conversation_id_fk" FOREIGN KEY ("conversation_id") REFERENCES "conversations"("conversation_id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "messages" ADD CONSTRAINT "messages_sender_id_users_user_id_fk" FOREIGN KEY ("sender_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -146,18 +159,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "sleep_logs" ADD CONSTRAINT "sleep_logs_user_id_users_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "messages" ADD CONSTRAINT "messages_conversation_id_conversations_conversation_id_fk" FOREIGN KEY ("conversation_id") REFERENCES "conversations"("conversation_id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "messages" ADD CONSTRAINT "messages_sender_id_users_user_id_fk" FOREIGN KEY ("sender_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

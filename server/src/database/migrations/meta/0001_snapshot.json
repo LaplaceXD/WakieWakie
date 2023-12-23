@@ -1,6 +1,6 @@
 {
-  "id": "e4b171ea-8953-44f1-b723-cdfda255bcf1",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "e5d3bbc2-c923-4cf7-ae8f-0b758d2464bc",
+  "prevId": "e4b171ea-8953-44f1-b723-cdfda255bcf1",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -278,6 +278,64 @@
         "conversation_metadata_conversation_id_user_id_pk": {
           "name": "conversation_metadata_conversation_id_user_id_pk",
           "columns": ["conversation_id", "user_id"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "message_metadata": {
+      "name": "message_metadata",
+      "schema": "",
+      "columns": {
+        "message_id": {
+          "name": "message_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "seened_at": {
+          "name": "seened_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "message_metadata_messages_fk": {
+          "name": "message_metadata_messages_fk",
+          "tableFrom": "message_metadata",
+          "tableTo": "messages",
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["message_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "message_metadata_users_fk": {
+          "name": "message_metadata_users_fk",
+          "tableFrom": "message_metadata",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "message_metadata_message_id_user_id_pk": {
+          "name": "message_metadata_message_id_user_id_pk",
+          "columns": ["message_id", "user_id"]
         }
       },
       "uniqueConstraints": {}

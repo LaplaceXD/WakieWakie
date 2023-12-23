@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { customType, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 
 import { messages } from "./messages";
@@ -28,13 +27,5 @@ export const attachments = pgTable("attachments", {
   blob: bytea("blob", { mode: "buffer" }),
   ext: varchar("ext", { length: 3 }),
 });
-
-export const attachmentMessage = relations(attachments, ({ one }) => ({
-  message: one(messages),
-}));
-
-export const messageAttachments = relations(messages, ({ many }) => ({
-  attachments: many(attachments),
-}));
 
 export type AttachmentModel = typeof attachments.$inferSelect;
