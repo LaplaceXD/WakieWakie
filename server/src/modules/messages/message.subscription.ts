@@ -42,7 +42,7 @@ const subscriptions: SubscriptionResolvers = {
         .where(
           and(
             eq(conversationMetadata.userId, session.user!.id),
-            notInArray(conversationMetadata.conversationId, excludeIds ?? []),
+            notInArray(conversationMetadata.conversationId, (excludeIds ?? []).filter(Boolean) as string[]),
           ),
         );
 

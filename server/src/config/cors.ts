@@ -1,6 +1,9 @@
 import { CorsOptions } from "cors";
 
 export const cors = {
-  origin: ["http://localhost:5173", "http://localhost:4000", "https://sandbox.embed.apollographql.com"],
+  origin: [
+    ...(process.env["CORS_ORIGIN"] ?? "").split(" "),
+    ...(process.env["NODE_ENV"] === "production" ? [] : ["http://localhost:5173", "http://localhost:4000"]),
+  ],
   credentials: true,
 } satisfies CorsOptions;
