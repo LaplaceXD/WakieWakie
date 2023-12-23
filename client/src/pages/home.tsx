@@ -3,19 +3,11 @@ import { useState, useEffect } from "react";
 import AnalogClock from "@/components/analog-clock";
 import Buttons from "@/components/common/buttons";
 import RightDisplay from "@/components/right-home/right-display";
+import Title from "@/components/common/title";
 
 function Home() {
   const [clock, setClock] = useState("analog");
   const [time, setTime] = useState(new Date());
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(delay);
-  }, []);
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -44,35 +36,18 @@ function Home() {
 
   return (
     <div className="flex w-screen bg-gradient-to-br from-neutral-100 to-sky-100">
-      <div id="clock-container" className="flex w-1/2 flex-col items-center">
+      <div id="clock-container" className="flex w-full flex-col items-center">
         <div className="my-20">
-          <Buttons isActive={clock === "analog"} label="Analog" onClick={() => setClock("analog")} loading={loading} />
-          <Buttons
-            isActive={clock === "digital"}
-            label="Digital"
-            onClick={() => setClock("digital")}
-            loading={loading}
-          />
+          <Buttons isActive={clock === "analog"} label="Analog" onClick={() => setClock("analog")} type="" />
+          <Buttons isActive={clock === "digital"} label="Digital" onClick={() => setClock("digital")} type="" />
         </div>
         {clock === "analog" && (
-          <AnalogClock
-            seconds={secondsRotation}
-            minutes={minutesRotation}
-            hours={hoursRotation}
-            time={time}
-            loading={loading}
-          />
+          <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} time={time} />
         )}
-        {clock === "digital" && (
-          <div className="mt-40">
-            <span className="via-peach-200 bg-gradient-to-r from-yellow-200 to-pink-200 bg-clip-text text-8xl font-bold text-transparent">
-              {formattedTime}
-            </span>
-          </div>
-        )}
+        {clock === "digital" && <Title label={formattedTime} style="mt-40" />}
       </div>
-      <div id="card-container" className="flex flex-col items-center justify-center">
-        <RightDisplay loading={loading} />
+      <div id="card-container" className="w-full pr-10 flex flex-col items-center justify-center">
+        <RightDisplay />
       </div>
     </div>
   );

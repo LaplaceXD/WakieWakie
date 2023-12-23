@@ -1,16 +1,18 @@
 import { LuMoreVertical } from "react-icons/lu";
 
-function DisplayHeader({ user, toggleDisplayUser }) {
+function DisplayHeader({ user, image, toggleDisplayUser }) {
   return (
-    <div
-      id="display-header"
-      className="flex w-full items-center justify-between p-4 shadow-md"
-      style={{ transition: `width ease-in-out 200ms` }}
-    >
+    <div id="display-header" className="flex w-full items-center justify-between p-4 shadow-md">
       <div className="flex items-center">
-        <img src={user.image} alt={`User ${user.name}`} className="mr-2 aspect-square h-20 rounded-full object-cover" />
+        <img
+          src={image}
+          alt={`User ${user.firstName} ${user.lastName}`}
+          className="mr-2 aspect-square h-20 rounded-full bg-neutral-200/30 object-cover"
+        />
         <div className="flex flex-col">
-          <div className="text-2xl font-bold text-neutral-300">{user.name}</div>
+          <div className="text-2xl font-bold text-neutral-300">
+            {user.firstName} {user.lastName}
+          </div>
           <div className="text-neutral-200">Active now</div>
         </div>
       </div>

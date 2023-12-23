@@ -1,61 +1,84 @@
-import { useState, useEffect } from "react";
-
-import CoolSenku from "@/assets/test-media/ishigamiSenku.png";
-import Me from "@/assets/test-media/logo.png";
-import ChibiCale from "@/assets/test-media/chibi-cale.png";
-import ChibiSenku from "@/assets/test-media/chibi-senku.png";
+import { useEffect, useState } from "react";
+import { useQuery, useSubscription } from "@apollo/client";
 
 import Display from "@/components/messages/message-display/display";
 import TextDisplay from "@/components/common/text-display";
+import ShimmerSidebar from "@/components/common/shimmer/shimmer-sidebar";
 import Sidebar from "@/components/messages/sidebar";
 
+import { GET_CONVERSATIONS } from "@/components/messages/actions/get-conversations";
+import { CHECK_USER } from "@/components/actions/check-user";
+import { USER_MESSAGE_SUBSCRIPTION } from "@/components/messages/actions/userMessage-subscription";
+
 function Messages() {
-  const [loading, setLoading] = useState(true);
-  const users = [
-    {
-      id: 1,
-      image: CoolSenku,
-      name: "Ishigami Senku",
-      messages: [
-        { text: "Hello", timeSent: "9:53" },
-        { text: "The mitochondria is the powerhouse of the cell", timeSent: "9:54" },
-      ],
-      status: "ACCEPTED",
-    },
-    {
-      id: 2,
-      image: Me,
-      name: "Surely How",
-      messages: [{ text: "Would you like free stickers?", timeSent: "10:53" }],
-      status: "ACCEPTED",
-    },
-    {
-      id: 3,
-      image: ChibiCale,
-      name: "Cale Henituse",
-      messages: [
-        { text: "I need you to pay me in gold.", timeSent: "10:53" },
-        { text: "Unless you can't?", timeSent: "10:53" },
-        { text: "That's a shame.", timeSent: "10:54" },
-      ],
-      status: "PENDING",
-    },
-    {
-      id: 4,
-      image: ChibiSenku,
-      name: "Chibi Senku",
-      status: null,
-    },
-  ];
+  const [conversations, setConversations] = useState([]);
+  const { loading, data: conversationsData } = useQuery(GET_CONVERSATIONS, {
+    variables: { limit: 10, offset: 0 },
+  });
+  const { data: userData } = useQuery(CHECK_USER);
 
+  const userID = userData?.me?.id;
+
+  const { data: subscriptionData } = useSubscription(USER_MESSAGE_SUBSCRIPTION, {
+    variables: { excludeIds: userID },
+  });
+
+  // Function to sort conversations
+  const sortConversations = conversations => {
+    return conversations.slice().sort((a, b) => {
+      const sentAtA = a.recentMessage?.sentAt;
+      const sentAtB = b.recentMessage?.sentAt;
+      if (!sentAtA && !sentAtB) {
+        return 0;
+      }
+      if (!sentAtA) {
+        return 1;
+      }
+      if (!sentAtB) {
+        return -1;
+      }
+      return sentAtB.localeCompare(sentAtA);
+    });
+  };
+
+  // Update conversations with initial data
   useEffect(() => {
-    const delay = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    if (conversationsData && conversationsData.conversations) {
+      setConversations(sortConversations(conversationsData.conversations));
+    }
+  }, [conversationsData]);
 
-    return () => clearTimeout(delay);
-  }, []);
+  // Update conversations with subscription data
+  useEffect(() => {
+    if (subscriptionData && subscriptionData.userMessages) {
+      const newMessage = subscriptionData.userMessages.message;
+      const newConversationId = newMessage.conversationId;
 
+      setConversations(prevConversations => {
+        const conversationIndex = prevConversations.findIndex(conversation => conversation.id === newConversationId);
+
+        let updatedConversations;
+        if (conversationIndex >= 0) {
+          updatedConversations = [...prevConversations];
+          updatedConversations[conversationIndex] = {
+            ...updatedConversations[conversationIndex],
+            recentMessage: newMessage,
+          };
+        } else {
+          updatedConversations = [newMessage, ...prevConversations];
+        }
+
+        return sortConversations(updatedConversations);
+      });
+    }
+  }, [subscriptionData]);
+
+  // Handler for conversation card clicks
+  const handleCardClick = (user, conversationID, image) => {
+    setSelectedMessage(<Display user={user} conversationID={conversationID} image={image} />);
+  };
+
+  // Default message display
   const defaultMessage = (
     <TextDisplay
       TitleLabel="Select a chat"
@@ -63,20 +86,18 @@ function Messages() {
       style="h-full justify-center"
     />
   );
-
   const [selectedMessage, setSelectedMessage] = useState(defaultMessage);
 
-  const handleCardClick = user => {
-    if (user.status !== null) {
-      setSelectedMessage(<Display user={user} messages={user.messages} />);
-    }
-  };
-
   return (
-    <div className="flex h-screen w-screen">
-      <Sidebar users={users} onClick={handleCardClick} loading={loading} />
-      <div className="w-full bg-neutral-100">{selectedMessage}</div>
-    </div>
+    <>
+      {loading && <ShimmerSidebar />}
+      {!loading && (
+        <div className="flex h-screen w-screen">
+          <Sidebar conversations={conversations} userID={userID} handleCardClick={handleCardClick} />
+          <div className="w-full bg-neutral-100">{selectedMessage}</div>
+        </div>
+      )}
+    </>
   );
 }
 
