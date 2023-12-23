@@ -52,14 +52,22 @@ const router = createBrowserRouter([
   },
 ]);
 
+let GRAPHQL_ENDPOINT = import.meta.env.VITE_GRAPHQL_ENDPOINT || "";
+let WS_GRAPHQL_ENDPOINT = import.meta.env.VITE_GRAPHQL_WS_ENDPOINT || "";
+
+if (!import.meta.env.PROD) {
+  GRAPHQL_ENDPOINT ||= "http://localhost:4000/graphql";
+  WS_GRAPHQL_ENDPOINT ||= "ws://localhost:4000/graphql";
+}
+
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/graphql",
+  uri: GRAPHQL_ENDPOINT,
   credentials: "include",
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: "ws://localhost:4000/graphql",
+    url: WS_GRAPHQL_ENDPOINT,
   }),
 );
 
