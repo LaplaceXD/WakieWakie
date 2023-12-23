@@ -7,7 +7,7 @@ import CoolSenku from "@/assets/test-media/ishigamiSenku.png";
 import Me from "@/assets/test-media/logo.png";
 import ChibiCale from "@/assets/test-media/chibi-cale.png";
 import ChibiSenku from "@/assets/test-media/chibi-senku.png";
-import ShimmerCard from "@/components/shimmer-card";
+import ShimmerCard from "@/components/shimmer/shimmer-card";
 
 function CarouselMatches({ loading }) {
   const cards = [

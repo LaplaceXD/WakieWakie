@@ -1,4 +1,4 @@
-import ShimmerSkeleton from "@/components/shimmer-skeleton";
+import ShimmerSkeleton from "@/components/shimmer/shimmer-skeleton";
 
 function Buttons({ isActive, label, onClick, loading }) {
   return (
