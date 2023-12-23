@@ -1,4 +1,4 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
 import { conversationUsers, conversations, db } from "@/database";
@@ -64,61 +64,117 @@ const mutations: MutationResolvers = {
       throw new InternalServerError(err as Error);
     }
   },
+  acceptConversation: async (_, { conversationId }, { session }) => {
+    if (!session.user) throw new UnauthenticatedError();
+
+    try {
+      const [conversation] = await db.select().from(conversations).where(eq(conversations.id, conversationId));
+      if (!conversation) {
+        return {
+          code: ResponseCode.NotFound,
+          success: false,
+          message: "Message request does not exist.",
+          conversation: null,
+        };
+      }
+
+      const [request] = await db
+        .update(conversationUsers)
+        .set({ acceptedAt: sql`now()` })
+        .where(
+          and(
+            eq(conversationUsers.conversationId, conversationId),
+            eq(conversationUsers.userId, session.user!.id),
+            isNull(conversationUsers.acceptedAt),
+          ),
+        )
+        .returning();
+      if (!request) {
+        return {
+          code: ResponseCode.BadRequest,
+          success: false,
+          message: "Message request has already been accepted.",
+          conversation: null,
+        };
+      }
+
+      return {
+        code: ResponseCode.Ok,
+        success: true,
+        message: "Message request successfully accepted.",
+        conversation,
+      };
+    } catch (err) {
+      throw new InternalServerError(err as Error);
+    }
+  },
   toggleConversationMute: async (_, { conversationId }, { session }) => {
     if (!session.user) throw new UnauthenticatedError();
 
-    const updatedPreferences = await db
-      .update(conversationUsers)
-      .set({ isMuted: sql<boolean>`CASE WHEN ${conversationUsers.isMuted} THEN FALSE ELSE TRUE END` })
-      .where(and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)))
-      .returning();
-    if (updatedPreferences.length === 0) {
+    try {
+      const updatedPreferences = await db
+        .update(conversationUsers)
+        .set({ isMuted: sql<boolean>`CASE WHEN ${conversationUsers.isMuted} THEN FALSE ELSE TRUE END` })
+        .where(
+          and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)),
+        )
+        .returning();
+      if (updatedPreferences.length === 0) {
+        return {
+          code: ResponseCode.NotFound,
+          success: false,
+          message: "Conversation does not exist.",
+          conversation: null,
+        };
+      }
+
+      const conversation = await db.query.conversations.findFirst({
+        where: ({ id }, { eq }) => eq(id, conversationId),
+      });
+
       return {
-        code: ResponseCode.NotFound,
-        success: false,
-        message: "Conversation does not exist.",
-        conversation: null,
+        code: ResponseCode.Ok,
+        success: true,
+        message: "Conversation muted successfully.",
+        conversation,
       };
+    } catch (err) {
+      throw new InternalServerError(err as Error);
     }
-
-    const conversation = await db.query.conversations.findFirst({
-      where: ({ id }, { eq }) => eq(id, conversationId),
-    });
-
-    return {
-      code: ResponseCode.Ok,
-      success: true,
-      message: "Conversation muted successfully.",
-      conversation,
-    };
   },
   toggleConversationBlock: async (_, { conversationId }, { session }) => {
     if (!session.user) throw new UnauthenticatedError();
 
-    const updatedPreferences = await db
-      .update(conversationUsers)
-      .set({ isBlocked: sql<boolean>`CASE WHEN ${conversationUsers.isBlocked} THEN FALSE ELSE TRUE END` })
-      .where(and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)))
-      .returning();
-    if (updatedPreferences.length === 0) {
+    try {
+      const updatedPreferences = await db
+        .update(conversationUsers)
+        .set({ isBlocked: sql<boolean>`CASE WHEN ${conversationUsers.isBlocked} THEN FALSE ELSE TRUE END` })
+        .where(
+          and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)),
+        )
+        .returning();
+      if (updatedPreferences.length === 0) {
+        return {
+          code: ResponseCode.NotFound,
+          success: false,
+          message: "Conversation does not exist.",
+          conversation: null,
+        };
+      }
+
+      const conversation = await db.query.conversations.findFirst({
+        where: ({ id }, { eq }) => eq(id, conversationId),
+      });
+
       return {
-        code: ResponseCode.NotFound,
-        success: false,
-        message: "Conversation does not exist.",
-        conversation: null,
+        code: ResponseCode.Ok,
+        success: true,
+        message: "Conversation blocked successfully.",
+        conversation,
       };
+    } catch (err) {
+      throw new InternalServerError(err as Error);
     }
-
-    const conversation = await db.query.conversations.findFirst({
-      where: ({ id }, { eq }) => eq(id, conversationId),
-    });
-
-    return {
-      code: ResponseCode.Ok,
-      success: true,
-      message: "Conversation blocked successfully.",
-      conversation,
-    };
   },
 };
 

@@ -55,6 +55,8 @@ export const typeDefs = gql`
   type Mutation {
     "Create a conversation with a given user."
     createConversation(userId: ID!): ConversationResponse!
+    "Accept a conversation request."
+    acceptConversation(conversationId: ID!): ConversationResponse!
     "Set the conversation as muted or not."
     toggleConversationMute(conversationId: ID!): ConversationResponse!
     "Set a given conversation as blocked or not."
