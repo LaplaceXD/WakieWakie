@@ -5,7 +5,7 @@ import Me from "@/assets/test-media/logo.png";
 import ChibiCale from "@/assets/test-media/chibi-cale.png";
 import ChibiSenku from "@/assets/test-media/chibi-senku.png";
 
-import Display from "@/components/messages/display";
+import Display from "@/components/messages/message-display/display";
 import TextDisplay from "@/components/common/text-display";
 import Sidebar from "@/components/messages/sidebar";
 
