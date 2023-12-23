@@ -64,12 +64,12 @@ const mutations: MutationResolvers = {
       throw new InternalServerError(err as Error);
     }
   },
-  setConversationMute: async (_, { conversationId, isMuted }, { session }) => {
+  toggleConversationMute: async (_, { conversationId }, { session }) => {
     if (!session.user) throw new UnauthenticatedError();
 
     const updatedPreferences = await db
       .update(conversationUsers)
-      .set({ isMuted })
+      .set({ isMuted: sql<boolean>`CASE WHEN ${conversationUsers.isMuted} THEN FALSE ELSE TRUE END` })
       .where(and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)))
       .returning();
     if (updatedPreferences.length === 0) {
@@ -92,12 +92,12 @@ const mutations: MutationResolvers = {
       conversation,
     };
   },
-  setConversationBlock: async (_, { conversationId, isBlocked }, { session }) => {
+  toggleConversationBlock: async (_, { conversationId }, { session }) => {
     if (!session.user) throw new UnauthenticatedError();
 
     const updatedPreferences = await db
       .update(conversationUsers)
-      .set({ isBlocked })
+      .set({ isBlocked: sql<boolean>`CASE WHEN ${conversationUsers.isBlocked} THEN FALSE ELSE TRUE END` })
       .where(and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)))
       .returning();
     if (updatedPreferences.length === 0) {

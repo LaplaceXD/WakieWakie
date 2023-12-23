@@ -56,8 +56,8 @@ export const typeDefs = gql`
     "Create a conversation with a given user."
     createConversation(userId: ID!): ConversationResponse!
     "Set the conversation as muted or not."
-    setConversationMute(conversationId: ID!, isMuted: Boolean!): ConversationResponse!
+    toggleConversationMute(conversationId: ID!): ConversationResponse!
     "Set a given conversation as blocked or not."
-    setConversationBlock(conversationId: ID!, isBlocked: Boolean!): ConversationResponse!
+    toggleConversationBlock(conversationId: ID!): ConversationResponse!
   }
 `;
