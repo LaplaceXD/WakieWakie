@@ -1,7 +1,7 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
-import { conversationUsers, conversations, db } from "@/database";
+import { conversationMetadata, conversations, db } from "@/database";
 import { InternalServerError, UnauthenticatedError } from "@/errors";
 
 import { publishNotification } from "../notifications";
@@ -24,11 +24,11 @@ const mutations: MutationResolvers = {
 
     try {
       const conversation = await db.transaction(async tx => {
-        const [conversation] = await tx.insert(conversations).values({}).returning();
+        const [conversation] = await tx.insert(conversations).values({ creatorId: session.user!.id }).returning();
         if (!conversation) return tx.rollback();
 
         const users = await tx
-          .insert(conversationUsers)
+          .insert(conversationMetadata)
           .values([
             {
               conversationId: conversation.id,
@@ -78,14 +78,23 @@ const mutations: MutationResolvers = {
         };
       }
 
+      if (conversation.creatorId === session.user!.id) {
+        return {
+          code: ResponseCode.BadRequest,
+          success: false,
+          message: "Proposal has already been sent.",
+          conversation: null,
+        };
+      }
+
       const [request] = await db
-        .update(conversationUsers)
+        .update(conversationMetadata)
         .set({ acceptedAt: sql`now()` })
         .where(
           and(
-            eq(conversationUsers.conversationId, conversationId),
-            eq(conversationUsers.userId, session.user!.id),
-            isNull(conversationUsers.acceptedAt),
+            eq(conversationMetadata.conversationId, conversationId),
+            eq(conversationMetadata.userId, session.user!.id),
+            isNull(conversationMetadata.acceptedAt),
           ),
         )
         .returning();
@@ -113,10 +122,13 @@ const mutations: MutationResolvers = {
 
     try {
       const updatedPreferences = await db
-        .update(conversationUsers)
-        .set({ isMuted: sql<boolean>`CASE WHEN ${conversationUsers.isMuted} THEN FALSE ELSE TRUE END` })
+        .update(conversationMetadata)
+        .set({ isMuted: sql<boolean>`CASE WHEN ${conversationMetadata.isMuted} THEN FALSE ELSE TRUE END` })
         .where(
-          and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)),
+          and(
+            eq(conversationMetadata.conversationId, conversationId),
+            eq(conversationMetadata.userId, session.user!.id),
+          ),
         )
         .returning();
       if (updatedPreferences.length === 0) {
@@ -147,10 +159,13 @@ const mutations: MutationResolvers = {
 
     try {
       const updatedPreferences = await db
-        .update(conversationUsers)
-        .set({ isBlocked: sql<boolean>`CASE WHEN ${conversationUsers.isBlocked} THEN FALSE ELSE TRUE END` })
+        .update(conversationMetadata)
+        .set({ isBlocked: sql<boolean>`CASE WHEN ${conversationMetadata.isBlocked} THEN FALSE ELSE TRUE END` })
         .where(
-          and(eq(conversationUsers.conversationId, conversationId), eq(conversationUsers.userId, session.user!.id)),
+          and(
+            eq(conversationMetadata.conversationId, conversationId),
+            eq(conversationMetadata.userId, session.user!.id),
+          ),
         )
         .returning();
       if (updatedPreferences.length === 0) {

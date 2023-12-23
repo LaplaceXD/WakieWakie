@@ -15,6 +15,8 @@ export const typeDefs = gql`
   type Conversation {
     "The conversation ID."
     id: ID!
+    "The user that created the conversation."
+    creator: User!
     "The date when the conversation was created."
     createdAt: DateTime!
     "The users within the conversation."
@@ -39,13 +41,6 @@ export const typeDefs = gql`
     "Current conversations of the currently logged in user."
     conversations(
       "The number of conversations to retrieve."
-      limit: Int!
-      "The offset to be used."
-      offset: Int!
-    ): [Conversation!]!
-    "Proposals (or message requests) sent by the currently logged in user."
-    proposals(
-      "The number of proposals to retrieve."
       limit: Int!
       "The offset to be used."
       offset: Int!

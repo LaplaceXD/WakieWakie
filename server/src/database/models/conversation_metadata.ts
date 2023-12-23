@@ -4,8 +4,8 @@ import { boolean, foreignKey, pgTable, primaryKey, timestamp, uuid } from "drizz
 import { conversations } from "./conversations";
 import { users } from "./users";
 
-export const conversationUsers = pgTable(
-  "conversation_users",
+export const conversationMetadata = pgTable(
+  "conversation_metadata",
   {
     conversationId: uuid("conversation_id").notNull(),
     userId: uuid("user_id").notNull(),
@@ -17,12 +17,12 @@ export const conversationUsers = pgTable(
   table => ({
     pk: primaryKey({ columns: [table.conversationId, table.userId] }),
     fkConversation: foreignKey({
-      name: "conversation_users_conversation_fk",
+      name: "conversation_metadata_conversation_fk",
       columns: [table.conversationId],
       foreignColumns: [conversations.id],
     }),
     fkUsers: foreignKey({
-      name: "conversation_users_users_fk",
+      name: "conversation_metadata_users_fk",
       columns: [table.userId],
       foreignColumns: [users.id],
     }),
@@ -30,16 +30,16 @@ export const conversationUsers = pgTable(
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
-  conversations: many(conversationUsers),
+  conversations: many(conversationMetadata),
 }));
 
 export const conversationsRelations = relations(conversations, ({ many }) => ({
-  conversationUsers: many(conversationUsers),
+  conversationUsers: many(conversationMetadata),
 }));
 
-export const conversationUsersRelations = relations(conversationUsers, ({ one }) => ({
+export const conversationUsersRelations = relations(conversationMetadata, ({ one }) => ({
   users: one(users),
   conversations: one(conversations),
 }));
 
-export type ConversationUserModel = typeof conversationUsers.$inferSelect;
+export type ConversationMetadataModel = typeof conversationMetadata.$inferSelect;

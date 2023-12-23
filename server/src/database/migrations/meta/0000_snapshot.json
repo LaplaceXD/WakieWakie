@@ -1,5 +1,5 @@
 {
-  "id": "a98ea41f-ca95-4b23-a345-2d14eb92e156",
+  "id": "e4b171ea-8953-44f1-b723-cdfda255bcf1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -77,12 +77,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "status": {
-          "name": "status",
-          "type": "varchar(12)",
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "'ACTIVE'"
+          "notNull": false
         },
         "last_login": {
           "name": "last_login",
@@ -91,18 +90,7 @@
           "notNull": false
         }
       },
-      "indexes": {
-        "email_idx": {
-          "name": "email_idx",
-          "columns": ["email"],
-          "isUnique": false
-        },
-        "username_idx": {
-          "name": "username_idx",
-          "columns": ["username"],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "auth_auth_id_users_user_id_fk": {
           "name": "auth_auth_id_users_user_id_fk",
@@ -192,6 +180,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "creator_id": {
+          "name": "creator_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -201,12 +195,22 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "conversations_creator_id_users_user_id_fk": {
+          "name": "conversations_creator_id_users_user_id_fk",
+          "tableFrom": "conversations",
+          "tableTo": "users",
+          "columnsFrom": ["creator_id"],
+          "columnsTo": ["user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "conversation_users": {
-      "name": "conversation_users",
+    "conversation_metadata": {
+      "name": "conversation_metadata",
       "schema": "",
       "columns": {
         "conversation_id": {
@@ -251,18 +255,18 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "conversation_users_conversation_fk": {
-          "name": "conversation_users_conversation_fk",
-          "tableFrom": "conversation_users",
+        "conversation_metadata_conversation_fk": {
+          "name": "conversation_metadata_conversation_fk",
+          "tableFrom": "conversation_metadata",
           "tableTo": "conversations",
           "columnsFrom": ["conversation_id"],
           "columnsTo": ["conversation_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "conversation_users_users_fk": {
-          "name": "conversation_users_users_fk",
-          "tableFrom": "conversation_users",
+        "conversation_metadata_users_fk": {
+          "name": "conversation_metadata_users_fk",
+          "tableFrom": "conversation_metadata",
           "tableTo": "users",
           "columnsFrom": ["user_id"],
           "columnsTo": ["user_id"],
@@ -271,11 +275,97 @@
         }
       },
       "compositePrimaryKeys": {
-        "conversation_users_conversation_id_user_id_pk": {
-          "name": "conversation_users_conversation_id_user_id_pk",
+        "conversation_metadata_conversation_id_user_id_pk": {
+          "name": "conversation_metadata_conversation_id_user_id_pk",
           "columns": ["conversation_id", "user_id"]
         }
       },
+      "uniqueConstraints": {}
+    },
+    "messages": {
+      "name": "messages",
+      "schema": "",
+      "columns": {
+        "message_id": {
+          "name": "message_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "conversation_id": {
+          "name": "conversation_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sender_id": {
+          "name": "sender_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "received_at": {
+          "name": "received_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seened_at": {
+          "name": "seened_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "messages_conversation_id_conversations_conversation_id_fk": {
+          "name": "messages_conversation_id_conversations_conversation_id_fk",
+          "tableFrom": "messages",
+          "tableTo": "conversations",
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["conversation_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "messages_sender_id_users_user_id_fk": {
+          "name": "messages_sender_id_users_user_id_fk",
+          "tableFrom": "messages",
+          "tableTo": "users",
+          "columnsFrom": ["sender_id"],
+          "columnsTo": ["user_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "notifications": {
@@ -295,9 +385,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "content": {
-          "name": "content",
-          "type": "json",
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -380,13 +476,7 @@
           "notNull": false
         }
       },
-      "indexes": {
-        "name_idx": {
-          "name": "name_idx",
-          "columns": ["name"],
-          "isUnique": false
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "routines_user_id_users_user_id_fk": {
           "name": "routines_user_id_users_user_id_fk",
@@ -524,115 +614,8 @@
           "notNull": false
         }
       },
-      "indexes": {
-        "gender_idx": {
-          "name": "gender_idx",
-          "columns": ["gender"],
-          "isUnique": false
-        },
-        "interest_idx": {
-          "name": "interest_idx",
-          "columns": ["interest"],
-          "isUnique": false
-        },
-        "alarm_time_idx": {
-          "name": "alarm_time_idx",
-          "columns": ["alarm_time"],
-          "isUnique": false
-        },
-        "location_idx": {
-          "name": "location_idx",
-          "columns": ["city", "country"],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "messages": {
-      "name": "messages",
-      "schema": "",
-      "columns": {
-        "message_id": {
-          "name": "message_id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "conversation_id": {
-          "name": "conversation_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sender_id": {
-          "name": "sender_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "sent_at": {
-          "name": "sent_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "received_at": {
-          "name": "received_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "seened_at": {
-          "name": "seened_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "deleted_at": {
-          "name": "deleted_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
       "indexes": {},
-      "foreignKeys": {
-        "messages_conversation_id_conversations_conversation_id_fk": {
-          "name": "messages_conversation_id_conversations_conversation_id_fk",
-          "tableFrom": "messages",
-          "tableTo": "conversations",
-          "columnsFrom": ["conversation_id"],
-          "columnsTo": ["conversation_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "messages_sender_id_users_user_id_fk": {
-          "name": "messages_sender_id_users_user_id_fk",
-          "tableFrom": "messages",
-          "tableTo": "users",
-          "columnsFrom": ["sender_id"],
-          "columnsTo": ["user_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }

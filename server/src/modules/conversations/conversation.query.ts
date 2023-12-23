@@ -1,7 +1,7 @@
 import { desc, eq, inArray, sql } from "drizzle-orm";
 
 import { QueryResolvers } from "@/__generated__/gql";
-import { conversationUsers, conversations, db, messages } from "@/database";
+import { conversationMetadata, conversations, db, messages } from "@/database";
 import { UnauthenticatedError } from "@/errors";
 
 const queries: QueryResolvers = {
@@ -17,9 +17,9 @@ const queries: QueryResolvers = {
     if (adjustedLimit <= 0) return [];
 
     const loggedInUserConversations = db
-      .select({ conversationId: conversationUsers.conversationId })
-      .from(conversationUsers)
-      .where(eq(conversationUsers.userId, session.user!.id));
+      .select({ conversationId: conversationMetadata.conversationId })
+      .from(conversationMetadata)
+      .where(eq(conversationMetadata.userId, session.user!.id));
 
     const convoRecents = db
       .select({
@@ -34,6 +34,7 @@ const queries: QueryResolvers = {
       .select({
         id: conversations.id,
         createdAt: conversations.createdAt,
+        creatorId: conversations.creatorId,
         mostRecentActivity: convoRecents.mostRecentActivity,
       })
       .from(conversations)

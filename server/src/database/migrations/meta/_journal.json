@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1703157304589,
-      "tag": "0000_happy_molly_hayes",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1703231436123,
-      "tag": "0001_fearless_ulik",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1703252494816,
-      "tag": "0002_aspiring_korath",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1703253242983,
-      "tag": "0003_gifted_puck",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1703258322686,
-      "tag": "0004_nosy_rictor",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1703261576329,
-      "tag": "0005_worried_shadow_king",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1703269890024,
-      "tag": "0006_clear_mystique",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1703270817817,
-      "tag": "0007_yummy_meltdown",
+      "when": 1703316522537,
+      "tag": "0000_stormy_wallflower",
       "breakpoints": true
     }
   ]
