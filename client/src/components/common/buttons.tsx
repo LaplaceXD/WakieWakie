@@ -1,4 +1,11 @@
-function Buttons({ isActive, label, onClick, type }) {
+interface ButtonsProps {
+  isActive: boolean;
+  label: string;
+  onClick: () => void;
+  type: string;
+}
+
+function Buttons({ isActive, label, onClick, type }: ButtonsProps) {
   return (
     <button
       type="button"

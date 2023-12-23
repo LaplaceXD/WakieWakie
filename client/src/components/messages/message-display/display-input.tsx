@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Buttons from "@/components/common/buttons";
 import { useMutation } from "@apollo/client";
 import { SEND_MESSAGE } from "@/components/messages/actions/send-message";
 
-function DisplayInput({ conversationId }) {
+interface DisplayInputProps {
+  conversationId: string;
+}
+
+function DisplayInput({ conversationId }: DisplayInputProps) {
   const [messageContent, setMessageContent] = useState("");
-  const [sendMessage, { data, loading, error }] = useMutation(SEND_MESSAGE);
+  const [sendMessage] = useMutation(SEND_MESSAGE);
 
   const handleSendMessage = async () => {
     try {
@@ -35,7 +39,7 @@ function DisplayInput({ conversationId }) {
         value={messageContent}
         onChange={e => setMessageContent(e.target.value)}
       />
-      <Buttons label="send" type="chat" onClick={handleSendMessage} />
+      <Buttons label="send" type="chat" onClick={handleSendMessage} isActive={true} />
     </div>
   );
 }

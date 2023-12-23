@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+
 const FormInput = forwardRef(({ label, type, options }, ref) => {
   const style =
     "h-10 w-80 rounded-lg bg-neutral-200/30 p-4 duration-150 ease-in-out hover:border-2 hover:border-neutral-200";

@@ -20,7 +20,11 @@ function NotificationModal({ onClose, notifications, count }) {
                   <LuMail className="mr-4 size-6 text-pink-200" />
                   <span>{notification.message}</span>
                 </div>
-                <CheckNotification convoID={notification.metadata.conversationId} notifID={notification.id} onClick={handleCloseModal} />
+                <CheckNotification
+                  convoID={notification.metadata.conversationId}
+                  notifID={notification.id}
+                  onClick={handleCloseModal}
+                />
               </div>
             ))}
           </div>

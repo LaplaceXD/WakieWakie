@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LuLayoutGrid, LuLightbulb, LuLogOut, LuMessageSquare, LuUser } from "react-icons/lu";
+import { LuLayoutGrid, LuLogOut, LuMessageSquare, LuUser } from "react-icons/lu";
 import { useApolloClient, useMutation } from "@apollo/client";
 import { toast } from "react-toastify";
 

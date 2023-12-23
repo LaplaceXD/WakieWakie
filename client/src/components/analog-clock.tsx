@@ -1,4 +1,10 @@
-function AnalogClock({ seconds, minutes, hours }) {
+interface AnalogClockProps {
+  seconds: number;
+  minutes: number;
+  hours: number;
+}
+
+function AnalogClock({ seconds, minutes, hours }: AnalogClockProps) {
   const numbers = Array.from({ length: 12 }, (_, index) => index + 1);
 
   return (

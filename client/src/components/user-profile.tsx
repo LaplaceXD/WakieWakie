@@ -25,14 +25,14 @@ function UserProfile({ onClose }) {
       {loading ? (
         <ShimmerProfile />
       ) : (
-        <div className="mb-4 flex flex-col px-4 items-center">
+        <div className="mb-4 flex flex-col items-center px-4">
           <div className="flex items-center">
             <div className="aspect-square size-28 rounded-full bg-peach-100">
               <img src={importedImages[randomIndex]} className="h-full w-full rounded-full object-cover " alt="" />
             </div>
             <div className="ml-8 flex flex-col">
               <div className="flex items-center">
-                <span className="mr-2 mb-2 text-6xl font-bold text-pink-200">{fullName}</span>
+                <span className="mb-2 mr-2 text-6xl font-bold text-pink-200">{fullName}</span>
                 {gender === "MALE" && <IoMale className={iconStyle} />}
                 {gender === "FEMALE" && <IoFemale className={iconStyle} />}
                 {gender === "OTHERS" && <IoMaleFemaleOutline className={iconStyle} />}
@@ -61,7 +61,7 @@ function UserProfile({ onClose }) {
             </div>
             <div className="px-10">
               <span className="text-sm text-pink-100">Bio:</span>
-              <div className="h-full max-w-96 w-72 rounded-lg bg-neutral-200/10 p-6">
+              <div className="h-full w-72 max-w-96 rounded-lg bg-neutral-200/10 p-6">
                 <div className="break-words">{data.me.bio}</div>
               </div>
             </div>

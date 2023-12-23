@@ -5,14 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { ACCEPT_CONVERSATION } from "@/components/actions/accept-conversation";
 import { SEEN_NOTIFICATIONS } from "@/components/actions/seen-notification";
 import { GET_CONVERSATIONS } from "@/components/messages/actions/get-conversations";
+import { ConversationQuery } from "@/__generated__/graphql";
 
-function CheckNotification({ convoID, notifID, onClick }) {
+interface CheckNotificationProps {
+  convoID: string;
+  notifID: string;
+  onClick?: () => void;
+}
+
+function CheckNotification({ convoID, notifID, onClick }: CheckNotificationProps) {
   const navigate = useNavigate();
 
   const [acceptConversation] = useMutation(ACCEPT_CONVERSATION);
   const [seenNotification] = useMutation(SEEN_NOTIFICATIONS);
 
-  const { loading, data: convo } = useQuery(GET_CONVERSATIONS, {
+  const { data: convo } = useQuery<ConversationQuery>(GET_CONVERSATIONS, {
     variables: {
       limit: 10,
       offset: 0,
@@ -21,7 +28,7 @@ function CheckNotification({ convoID, notifID, onClick }) {
 
   const handleAcceptConversation = async () => {
     try {
-      const matchingConversation = convo.conversations.find(conversation => conversation.id === convoID);
+      const matchingConversation = (convo?.conversations ?? []).find(conversation => conversation.id === convoID);
 
       if (!matchingConversation) {
         console.error("Conversation not found");

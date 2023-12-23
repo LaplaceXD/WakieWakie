@@ -36,7 +36,7 @@ function Notifications({ iconStyles }) {
         })
         .catch(() => {});
     };
-  }, []);
+  }, [refetch, subscribeToMore]);
 
   const notifications = data && data.recentNotifications ? data.recentNotifications : [];
   const filteredNotifications = notifications.filter(notification => {

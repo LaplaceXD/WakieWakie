@@ -1,6 +1,6 @@
 function ShimmerCard() {
   return (
-    <div className="flex flex-col animate-pulse items-center overflow-hidden">
+    <div className="flex animate-pulse flex-col items-center overflow-hidden">
       <div className="flex flex-col items-center rounded-lg bg-gray-300">
         <div className="mt-8 h-72 w-80 rounded-lg bg-gray-400"></div>
         <div className="flex w-full flex-col px-8 pb-6 pt-2">

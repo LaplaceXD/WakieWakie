@@ -17,7 +17,14 @@ function MessageText({ content, messageId, refetchMessages }) {
       >
         {content}
       </span>
-      {modalState && <MessageModal closeModal={closeModal} content={content} messageId={messageId} refetchMessages={refetchMessages} />}
+      {modalState && (
+        <MessageModal
+          closeModal={closeModal}
+          content={content}
+          messageId={messageId}
+          refetchMessages={refetchMessages}
+        />
+      )}
     </>
   );
 }

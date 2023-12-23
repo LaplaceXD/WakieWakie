@@ -46,7 +46,7 @@ function Home() {
         )}
         {clock === "digital" && <Title label={formattedTime} style="mt-40" />}
       </div>
-      <div id="card-container" className="w-full pr-10 flex flex-col items-center justify-center">
+      <div id="card-container" className="flex w-full flex-col items-center justify-center pr-10">
         <RightDisplay />
       </div>
     </div>

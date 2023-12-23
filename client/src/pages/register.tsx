@@ -16,7 +16,7 @@ function Register() {
   const navigate = useNavigate();
   const formFieldsRef = useRef({});
 
-  const [registeruser, { data, error }] = useMutation(REGISTER_USER);
+  const [registeruser] = useMutation(REGISTER_USER);
 
   const formFields = [
     { label: "Alarm Time", type: "text", options: [] },

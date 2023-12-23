@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { User, MessagesQuery, SubscriptionSubscription } from "@/__generated__/graphql";
 
 import DisplayUser from "@/components/messages/message-display/display-user";
 import DisplayMessages from "@/components/messages/message-display/display-messages";
@@ -9,26 +10,30 @@ import DisplayInput from "./display-input";
 import { GET_MESSAGES } from "@/components/messages/actions/get-messages";
 import { CONVERSATION_MESSAGES_SUBSCRIPTION } from "@/components/messages/actions/conversationMessages-subscription";
 
-function Display({ user, conversationID, image }) {
+interface DisplayProps {
+  user: User;
+  conversationID: string;
+  image?: string;
+}
+
+function Display({ user, conversationID, image }: DisplayProps) {
   const [displayUser, setDisplayUser] = useState(false);
-  const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
-  const { loading, error, data, refetch, subscribeToMore } = useQuery(GET_MESSAGES, {
+  const { loading, data, refetch, subscribeToMore } = useQuery<MessagesQuery>(GET_MESSAGES, {
     variables: { conversationId: conversationID, limit: 100, offset: 0 },
   });
 
   useEffect(() => {
     const cleanUp = refetch({ conversationId: conversationID, limit: 100, offset: 0 })
       .then(() => {
-        return subscribeToMore({
+        return subscribeToMore<SubscriptionSubscription>({
           document: CONVERSATION_MESSAGES_SUBSCRIPTION,
           variables: { conversationId: conversationID },
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData.data) return prev;
-            const { conversationMessages } = subscriptionData.data;
             return {
-              messages: [conversationMessages.message, ...(prev.messages || [])],
+              messages: [subscriptionData!.data!.conversationMessages!.message, ...(prev.messages || [])],
             };
           },
         });
@@ -41,7 +46,7 @@ function Display({ user, conversationID, image }) {
         })
         .catch(() => {});
     };
-  }, [conversationID]);
+  }, [conversationID, refetch, subscribeToMore]);
 
   // const scrollToBottom = () => {
   //   if (messagesEndRef.current) {
@@ -57,7 +62,7 @@ function Display({ user, conversationID, image }) {
   const toggleDisplayUser = () => {
     setDisplayUser(!displayUser);
   };
-  const formatTime = isoString => {
+  const formatTime = (isoString: string) => {
     const date = new Date(isoString);
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -73,8 +78,8 @@ function Display({ user, conversationID, image }) {
   ) : (
     <div className="flex h-full flex-col ">
       <DisplayHeader user={user} image={image} toggleDisplayUser={toggleDisplayUser} />
-      <div className="flex-grow overflow-y-auto px-6 flex flex-col-reverse" ref={messagesContainerRef}>
-        {data?.messages .map((message, index) => (
+      <div className="flex flex-grow flex-col-reverse overflow-y-auto px-6" ref={messagesContainerRef}>
+        {data?.messages.map((message, index) => (
           <DisplayMessages
             key={index}
             image={image}

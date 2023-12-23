@@ -4,8 +4,8 @@ import { LuX, LuCheck } from "react-icons/lu";
 
 function DisplayModal({ title, content, cancel, confirm }) {
   return (
-    <div className="flex flex-col items-center max-w-64">
-      <span className="mb-5 text-xl font-bold text-neutral-200 text-center">{title}</span>
+    <div className="flex max-w-64 flex-col items-center">
+      <span className="mb-5 text-center text-xl font-bold text-neutral-200">{title}</span>
       <span className="w-fit rounded-full bg-neutral-200/30 px-4 py-2">{content}</span>
       <div className="mt-16 flex">
         <IconButtons icon={LuX} onClick={cancel} />

@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const CONVERSATION_MESSAGES_SUBSCRIPTION = gql(`
     subscription Subscription($conversationId: ID!) {
