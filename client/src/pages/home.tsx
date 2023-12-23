@@ -2,11 +2,23 @@ import { useState, useEffect } from "react";
 
 import AnalogClock from "@/components/analog-clock";
 import Buttons from "@/components/buttons";
-import CarouselCards from "@/components/carousel-cards";
+import CarouselMatches from "@/components/carousel-matches";
 
 function Home() {
+  const shimmerStyle = "animate-pulse bg-gray-200 inline-block";
+
   const [clock, setClock] = useState("analog");
   const [time, setTime] = useState(new Date());
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay (you can remove this in a real scenario)
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(delay); // Cleanup on component unmount
+  }, []);
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -37,11 +49,11 @@ function Home() {
     <div className="flex w-screen bg-gradient-to-br from-neutral-100 to-sky-100">
       <div id="clock-container" className="flex w-1/2 flex-col items-center">
         <div className="my-20">
-          <Buttons isActive={clock === "analog"} label="Analog" onClick={() => setClock("analog")} />
-          <Buttons isActive={clock === "digital"} label="Digital" onClick={() => setClock("digital")} />
+          <Buttons isActive={clock === "analog"} label="Analog" onClick={() => setClock("analog")} loading={loading} />
+          <Buttons isActive={clock === "digital"} label="Digital" onClick={() => setClock("digital")} loading={loading} />
         </div>
         {clock === "analog" && (
-          <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} time={time} />
+            <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} time={time} loading={loading} />
         )}
         {clock === "digital" && (
           <div className="mt-40">
@@ -50,7 +62,7 @@ function Home() {
         )}
       </div>
       <div id="card-container" className="flex flex-col items-center justify-center">
-        <CarouselCards />
+        <CarouselMatches loading={loading} />
       </div>
     </div>
   );
