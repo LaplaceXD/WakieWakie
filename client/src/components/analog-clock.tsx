@@ -3,7 +3,6 @@ import ShimmerSkeleton from "@/components/shimmer/shimmer-skeleton";
 function AnalogClock({ seconds, minutes, hours, loading }) {
   const numbers = Array.from({ length: 12 }, (_, index) => index + 1);
 
-  console.log(loading);
 
   return (
     <>

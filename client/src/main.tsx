@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
@@ -11,6 +11,7 @@ import Messages from "@/pages/messages";
 import App from "./App.tsx";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
+
 
 const router = createBrowserRouter([
   {
@@ -45,9 +46,14 @@ const router = createBrowserRouter([
   },
 ]);
 
-const client = new ApolloClient({
+const link = createHttpLink({
   uri: "http://localhost:4000/graphql",
+  credentials: "include",
+});
+
+const client = new ApolloClient({
   cache: new InMemoryCache(),
+  link
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

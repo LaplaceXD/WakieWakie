@@ -1,18 +1,17 @@
 import { IoFemale, IoMale, IoMaleFemaleOutline } from "react-icons/io5";
 import { LuMapPin } from "react-icons/lu";
 
-function CardCarousel({ key, image, name, age, gender, bio, location, index, currentIndex }) {
+function CardCarousel({ image, name, age, gender, bio, location, index, currentIndex }) {
   return (
     <div
-      key={key}
       className={`flex h-full w-full flex-shrink-0 flex-col items-center justify-center rounded-lg bg-peach-100 ${
         index === currentIndex ? "" : "hidden"
       }`}
     >
-      <div className="mt-8 h-72 w-80 rounded-lg bg-sky-50">
+      <div className="mt-8 h-72 w-80 rounded-lg bg-sky-50 ">
         <img
           src={image}
-          alt={`Card ${key}`}
+          alt={`Card ${index}`}
           className="h-full w-full rounded-lg border-4 border-neutral-200 object-cover"
         />
       </div>
