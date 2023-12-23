@@ -13,5 +13,3 @@ export const session = {
     maxAge: 1000 * 60 * 60 * 24, // 24h
   },
 } satisfies SessionOptions;
-
-console.log(session);
