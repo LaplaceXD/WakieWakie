@@ -25,6 +25,9 @@ export default {
           200: "#F82386",
         },
       },
+      fontFamily: {
+        quicksand: ['Quicksand', 'sans-serif'],
+      },
     },
   },
   plugins: [],
