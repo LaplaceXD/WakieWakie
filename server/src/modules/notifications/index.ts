@@ -1,3 +1,3 @@
 export * from "./notification.resolver";
 export * from "./notification.schema";
-export * from "./notification.util";
+export * from "./notification.event";

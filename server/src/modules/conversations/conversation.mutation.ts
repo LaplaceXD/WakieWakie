@@ -62,7 +62,7 @@ const mutations: MutationResolvers = {
       throw new InternalServerError(err as Error);
     }
   },
-  acceptConversation: async (_, { conversationId }, { session }) => {
+  acceptConversation: async (_, { conversationId }, { session, pubsub }) => {
     if (!session.user) throw new UnauthenticatedError();
 
     try {
@@ -104,6 +104,21 @@ const mutations: MutationResolvers = {
           conversation: null,
         };
       }
+
+      const [acceptor] = await db
+        .select({ firstName: users.firstName })
+        .from(users)
+        .where(eq(users.id, request.userId));
+      if (!acceptor) throw new Error(`User ${request.userId} does not exist.`);
+
+      await publishNotification(
+        pubsub,
+        conversation.creatorId,
+        `${acceptor.firstName} has accepted your message request.`,
+        {
+          conversationId: conversation.id,
+        },
+      );
 
       return {
         code: ResponseCode.Ok,
