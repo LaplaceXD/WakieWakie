@@ -3,6 +3,7 @@ export * from "./auth";
 export * from "./completed_routines";
 export * from "./conversation_metadata";
 export * from "./conversations";
+export * from "./message_metadata";
 export * from "./messages";
 export * from "./notifications";
 export * from "./routines";

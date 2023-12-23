@@ -13,9 +13,6 @@ export const messages = pgTable("messages", {
     .references(() => users.id),
   content: text("content").notNull().default(""),
   sentAt: timestamp("sent_at").notNull().defaultNow(),
-  receivedAt: timestamp("received_at"),
-  seenedAt: timestamp("seened_at"),
-  deletedAt: timestamp("deleted_at"),
   updatedAt: timestamp("updated_at"),
 });
 
