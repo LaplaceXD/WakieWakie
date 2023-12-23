@@ -1,6 +1,13 @@
+import { User } from "@/__generated__/graphql";
 import { LuMoreVertical } from "react-icons/lu";
 
-function DisplayHeader({ user, image, toggleDisplayUser }) {
+interface DisplayHeaderProps {
+  user: User;
+  image?: string;
+  toggleDisplayUser: () => void;
+}
+
+function DisplayHeader({ user, image, toggleDisplayUser }: DisplayHeaderProps) {
   return (
     <div id="display-header" className="flex w-full items-center justify-between p-4 shadow-md">
       <div className="flex items-center">

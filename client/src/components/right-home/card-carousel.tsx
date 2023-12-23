@@ -1,7 +1,17 @@
 import { IoFemale, IoMale, IoMaleFemaleOutline } from "react-icons/io5";
 import { LuMapPin } from "react-icons/lu";
 
-function CardCarousel({ image, name, gender, bio, location, index, currentIndex }) {
+interface CardCarouselProps {
+  image?: string;
+  name: string;
+  gender: string;
+  bio: string;
+  location: string;
+  index: number;
+  currentIndex: number;
+}
+
+function CardCarousel({ image, name, gender, bio, location, index, currentIndex }: CardCarouselProps) {
   return (
     <div
       className={`flex max-w-96 flex-shrink-0 flex-col items-center justify-center rounded-lg bg-peach-100 px-10 ${

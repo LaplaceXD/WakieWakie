@@ -9,7 +9,7 @@ export default function Error() {
       <h1>Oops!</h1>
       <p>Looks like you have a problem!</p>
       <p className="mt-4">
-        <i>{error.statusText || error.message}</i>
+        <i>{(error as any).statusText || (error as any).message}</i>
       </p>
     </div>
   );

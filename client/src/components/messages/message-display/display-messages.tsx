@@ -1,6 +1,28 @@
 import MessageText from "@/components/messages/message-display/message-text";
+import { OperationVariables, ApolloQueryResult } from "@apollo/client";
+import { MessagesQuery } from "@/__generated__/graphql";
 
-function DisplayMessages({ index, senderId, userId, image, content, sentAt, messageId, refetchMessages }) {
+interface DisplayMessagesProps {
+  index: number;
+  senderId: string;
+  userId: string;
+  messageId: string;
+  image?: string;
+  content: string;
+  sentAt: string;
+  refetchMessages: (_?: Partial<OperationVariables>) => Promise<ApolloQueryResult<MessagesQuery>>;
+}
+
+function DisplayMessages({
+  index,
+  senderId,
+  userId,
+  image,
+  content,
+  sentAt,
+  messageId,
+  refetchMessages,
+}: DisplayMessagesProps) {
   return (
     <div key={index} className={`mt-3 flex w-full items-center ${senderId !== userId ? "justify-end" : ""}`}>
       {senderId === userId && (

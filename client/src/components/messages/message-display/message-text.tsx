@@ -1,7 +1,15 @@
 import { useState } from "react";
 import MessageModal from "@/components/messages/message-display/message-modal";
+import { OperationVariables, ApolloQueryResult } from "@apollo/client";
+import { MessagesQuery } from "@/__generated__/graphql";
 
-function MessageText({ content, messageId, refetchMessages }) {
+interface MessageTextProps {
+  content: string;
+  messageId: string;
+  refetchMessages: (_?: Partial<OperationVariables>) => Promise<ApolloQueryResult<MessagesQuery>>;
+}
+
+function MessageText({ content, messageId, refetchMessages }: MessageTextProps) {
   const [modalState, setModalState] = useState(false);
   const openModal = () => {
     setModalState(true);

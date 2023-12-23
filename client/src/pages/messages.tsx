@@ -9,9 +9,10 @@ import Sidebar from "@/components/messages/sidebar";
 import { GET_CONVERSATIONS } from "@/components/messages/actions/get-conversations";
 import { CHECK_USER } from "@/components/actions/check-user";
 import { USER_MESSAGE_SUBSCRIPTION } from "@/components/messages/actions/userMessage-subscription";
+import { Conversation, User } from "@/__generated__/graphql";
 
 function Messages() {
-  const [conversations, setConversations] = useState([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const { loading, data: conversationsData } = useQuery(GET_CONVERSATIONS, {
     variables: { limit: 10, offset: 0 },
   });
@@ -24,7 +25,7 @@ function Messages() {
   });
 
   // Function to sort conversations
-  const sortConversations = conversations => {
+  const sortConversations = (conversations: Conversation[]) => {
     return conversations.slice().sort((a, b) => {
       const sentAtA = a.recentMessage?.sentAt;
       const sentAtB = b.recentMessage?.sentAt;
@@ -63,7 +64,7 @@ function Messages() {
           updatedConversations[conversationIndex] = {
             ...updatedConversations[conversationIndex],
             recentMessage: newMessage,
-          };
+          } as Conversation;
         } else {
           updatedConversations = [newMessage, ...prevConversations];
         }
@@ -74,7 +75,7 @@ function Messages() {
   }, [subscriptionData]);
 
   // Handler for conversation card clicks
-  const handleCardClick = (user, conversationID, image) => {
+  const handleCardClick = (user: User, conversationID: string, image?: string) => {
     setSelectedMessage(<Display user={user} conversationID={conversationID} image={image} />);
   };
 

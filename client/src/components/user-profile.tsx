@@ -8,7 +8,11 @@ import ShimmerProfile from "@/components/common/shimmer/shimmer-profile";
 import { LuMapPin, LuCherry } from "react-icons/lu";
 import { IoFemale, IoMale, IoMaleFemaleOutline } from "react-icons/io5";
 
-function UserProfile({ onClose }) {
+interface UserProfileProps {
+  onClose: () => void;
+}
+
+function UserProfile({ onClose }: UserProfileProps) {
   const { loading, data } = useQuery(CHECK_USER);
 
   const fullName = `${data.me.firstName} ${data.me.lastName}`;

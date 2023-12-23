@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 
 function Register() {
   const navigate = useNavigate();
-  const formFieldsRef = useRef({});
+  const formFieldsRef = useRef<Record<string, HTMLInputElement | HTMLSelectElement | null>>({});
 
   const [registeruser] = useMutation(REGISTER_USER);
 
@@ -33,8 +33,8 @@ function Register() {
   ];
 
   const registerHandler = () => {
-    const _userDetails = {};
-    Object.entries(formFieldsRef.current).forEach(([key, el]) => (_userDetails[key] = el.value));
+    const _userDetails: Record<string, string> = {};
+    Object.entries(formFieldsRef.current).forEach(([key, el]) => (_userDetails[key] = el?.value ?? ""));
 
     registeruser({ variables: { userDetails: _userDetails } })
       .then(res => {
@@ -47,7 +47,7 @@ function Register() {
           invalidFields.forEach(field => {
             const errorMessages = res.data.registerAccount.message[field];
 
-            errorMessages.forEach(errorMessage => {
+            errorMessages.forEach((errorMessage: string) => {
               const toastMessage = `Invalid input in ${field}: ${errorMessage}.`;
               toast.error(toastMessage);
             });

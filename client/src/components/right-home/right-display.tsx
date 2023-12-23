@@ -11,12 +11,15 @@ import ShimmerCard from "@/components/common/shimmer/shimmer-card";
 import TextDisplay from "@/components/common/text-display";
 import UserCarousel from "@/components/right-home/user-carousel";
 import { importedImages } from "@/assets/imported-images";
+import { User, UsersQuery } from "@/__generated__/graphql";
 
 function RightDisplay() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState<
+    (Pick<User, "id" | "gender" | "bio"> & { image?: string; name: string; location: string })[]
+  >([]);
 
-  const { data: allUsersData, loading } = useQuery(GET_USERS);
+  const { data: allUsersData, loading } = useQuery<UsersQuery>(GET_USERS);
   const [createConversation] = useMutation(CREATE_CONVERSATION);
 
   useEffect(() => {
@@ -36,8 +39,8 @@ function RightDisplay() {
   const handleCreateConversation = async () => {
     if (cards.length === 0 || currentIndex >= cards.length) return;
 
-    const currentUserId = cards[currentIndex].id;
-    const target = cards[currentIndex].name;
+    const currentUserId = cards[currentIndex]?.id ?? 0;
+    const target = cards[currentIndex]?.name ?? "";
 
     try {
       const response = await createConversation({ variables: { userId: currentUserId } });

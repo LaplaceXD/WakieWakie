@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "@/components/common/modal";
 import IconButtons from "@/components/common/icon-buttons";
 import { LuTrash2, LuX, LuCheck } from "react-icons/lu";
 import { useMutation } from "@apollo/client";
 import { DELETE_MESSAGE } from "@/components/messages/actions/delete-message";
 import { toast } from "react-toastify";
+import { OperationVariables, ApolloQueryResult } from "@apollo/client";
+import { MessagesQuery } from "@/__generated__/graphql";
 
-function MessageModal({ closeModal, content, messageId, refetchMessages }) {
+interface MessageModalProps {
+  closeModal: () => void;
+  content: string;
+  messageId: string;
+  refetchMessages: (_?: Partial<OperationVariables>) => Promise<ApolloQueryResult<MessagesQuery>>;
+}
+
+function MessageModal({ closeModal, content, messageId, refetchMessages }: MessageModalProps) {
   const [displayContent, setDisplayContent] = useState("default");
 
   const [deleteMessage] = useMutation(DELETE_MESSAGE);
@@ -26,7 +35,7 @@ function MessageModal({ closeModal, content, messageId, refetchMessages }) {
       }
     } catch (error) {
       console.error("Error during deletion:", error);
-      toast.error("An error occurred: " + error.message);
+      toast.error("An error occurred: " + (error as Error).message);
     }
   };
 

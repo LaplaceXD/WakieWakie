@@ -1,8 +1,14 @@
-import React from "react";
 import IconButtons from "@/components/common/icon-buttons";
 import { LuX, LuCheck } from "react-icons/lu";
 
-function DisplayModal({ title, content, cancel, confirm }) {
+interface DisplayModalProps {
+  title: string;
+  content: string;
+  confirm: () => void;
+  cancel: () => void;
+}
+
+function DisplayModal({ title, content, cancel, confirm }: DisplayModalProps) {
   return (
     <div className="flex max-w-64 flex-col items-center">
       <span className="mb-5 text-center text-xl font-bold text-neutral-200">{title}</span>

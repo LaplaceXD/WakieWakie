@@ -2,7 +2,12 @@ import TextDisplay from "@/components/common/text-display";
 import Modal from "@/components/common/modal";
 import Buttons from "@/components/common/buttons";
 
-function Logout({ onConfirm, onClose }) {
+interface LogoutProps {
+  onConfirm: () => void;
+  onClose: () => void;
+}
+
+function Logout({ onConfirm, onClose }: LogoutProps) {
   return (
     <Modal onClickOutside={onClose}>
       <TextDisplay TitleLabel="Logout?" TextLabel="Are you sure you want to logout?" />

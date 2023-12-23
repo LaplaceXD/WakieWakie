@@ -1,11 +1,15 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
-function Modal({ onClickOutside, children }) {
-  const modalRef = useRef(null);
+interface ModalProps {
+  onClickOutside: () => void;
+}
+
+function Modal({ onClickOutside, children }: React.PropsWithChildren<ModalProps>) {
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = event => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         onClickOutside();
       }
     };

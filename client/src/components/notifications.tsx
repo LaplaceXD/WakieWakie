@@ -4,8 +4,13 @@ import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { GET_SUBSCRIPTION } from "@/components/actions/notification-subscrption";
 import NotificationModal from "@/components/notification-modal";
+import { Notification } from "@/__generated__/graphql";
 
-function Notifications({ iconStyles }) {
+interface NotificationsProps {
+  iconStyles: string;
+}
+
+function Notifications({ iconStyles }: NotificationsProps) {
   const [modalState, setModalState] = useState(false);
 
   const { data, subscribeToMore, refetch } = useQuery(GET_NOTIFICATIONS, {
@@ -38,7 +43,7 @@ function Notifications({ iconStyles }) {
     };
   }, [refetch, subscribeToMore]);
 
-  const notifications = data && data.recentNotifications ? data.recentNotifications : [];
+  const notifications: Notification[] = data?.recentNotifications ? data.recentNotifications : [];
   const filteredNotifications = notifications.filter(notification => {
     return notification.seenedAt === null;
   });

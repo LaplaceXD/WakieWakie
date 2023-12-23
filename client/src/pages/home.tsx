@@ -42,7 +42,7 @@ function Home() {
           <Buttons isActive={clock === "digital"} label="Digital" onClick={() => setClock("digital")} type="" />
         </div>
         {clock === "analog" && (
-          <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} time={time} />
+          <AnalogClock seconds={secondsRotation} minutes={minutesRotation} hours={hoursRotation} />
         )}
         {clock === "digital" && <Title label={formattedTime} style="mt-40" />}
       </div>

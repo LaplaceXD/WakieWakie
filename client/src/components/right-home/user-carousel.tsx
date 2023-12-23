@@ -1,6 +1,12 @@
+import { User } from "@/__generated__/graphql";
 import CardCarousel from "@/components/right-home/card-carousel";
 
-function UserCarousel({ cards, currentIndex }) {
+interface UserCarouselProps {
+  cards: (Pick<User, "id" | "gender" | "bio"> & { image?: string; name: string; location: string })[];
+  currentIndex: number;
+}
+
+function UserCarousel({ cards, currentIndex }: UserCarouselProps) {
   return (
     <div className="mb-4 flex overflow-hidden shadow-lg">
       {cards.map((card, index) => (

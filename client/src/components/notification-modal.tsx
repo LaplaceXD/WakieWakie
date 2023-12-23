@@ -2,8 +2,15 @@ import { LuMail } from "react-icons/lu";
 
 import Modal from "@/components/common/modal";
 import CheckNotification from "@/components/check-notification";
+import { Notification } from "@/__generated__/graphql";
 
-function NotificationModal({ onClose, notifications, count }) {
+interface NotificationModalProps {
+  onClose: () => void;
+  notifications: Notification[];
+  count: number;
+}
+
+function NotificationModal({ onClose, notifications, count }: NotificationModalProps) {
   const handleCloseModal = () => {
     onClose();
   };

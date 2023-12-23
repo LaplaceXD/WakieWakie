@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -13,11 +13,11 @@ import { LOGIN_USER } from "@/pages/login-action";
 import { CHECK_USER } from "@/components/actions/check-user";
 
 import { useMutation, useQuery } from "@apollo/client";
-import { camelCase } from "@/components/utils/index.js";
+import { camelCase } from "@/components/utils";
 
 function Login() {
   const navigate = useNavigate();
-  const formFieldsRef = useRef({});
+  const formFieldsRef = useRef<Record<string, HTMLInputElement | HTMLSelectElement | null>>({});
 
   const [loginuser] = useMutation(LOGIN_USER);
 
@@ -39,10 +39,10 @@ function Login() {
   ];
 
   const loginHandler = () => {
-    const _userDetails = {};
+    const _userDetails: Record<string, string> = {};
     if (
       Object.entries(formFieldsRef.current).some(([key, el]) => {
-        const value = el.value.trim();
+        const value = (el as HTMLInputElement).value.trim();
         _userDetails[key] = value;
         return value === "";
       })
@@ -66,7 +66,6 @@ function Login() {
     <div className="flex h-screen justify-between bg-gradient-to-br from-neutral-100 to-sky-100">
       <div className="flex w-1/2 flex-col items-center justify-center">
         <TextDisplay TitleLabel="Welcome Back" TextLabel="" style="" />
-
         <div id="forms" className="mb-20 mt-5">
           {formFields.map((field, index) => (
             <FormInput

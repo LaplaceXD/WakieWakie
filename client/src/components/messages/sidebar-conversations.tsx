@@ -1,6 +1,13 @@
-import React from "react";
+import { Conversation, User } from "@/__generated__/graphql";
 
-function SidebarConversations({ conversation, userID, image, handleCardClick }) {
+interface SidebarConversationsProps {
+  conversation: Conversation;
+  userID: string;
+  image?: string;
+  handleCardClick: (_: User, __: string, ___?: string) => void;
+}
+
+function SidebarConversations({ conversation, userID, image, handleCardClick }: SidebarConversationsProps) {
   const otherUser = conversation.users.find(user => user.id !== userID);
   return otherUser ? (
     <div
