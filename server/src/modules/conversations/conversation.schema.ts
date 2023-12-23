@@ -19,6 +19,8 @@ export const typeDefs = gql`
     creator: User!
     "The date when the conversation was created."
     createdAt: DateTime!
+    "The number of messages that have not been seen."
+    unseened: Int!
     "The users within the conversation."
     users: [User!]!
     "The type of conversation."
