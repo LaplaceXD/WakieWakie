@@ -44,7 +44,6 @@ const queries: QueryResolvers = {
       .offset(adjustedOffset)
       .limit(adjustedLimit);
 
-    console.log(results);
     return results;
   },
 };

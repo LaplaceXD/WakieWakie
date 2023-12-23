@@ -1,7 +1,7 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 
 import { MutationResolvers, ResponseCode } from "@/__generated__/gql";
-import { conversationMetadata, conversations, db } from "@/database";
+import { conversationMetadata, conversations, db, users } from "@/database";
 import { InternalServerError, UnauthenticatedError } from "@/errors";
 
 import { publishNotification } from "../notifications";
@@ -10,9 +10,7 @@ const mutations: MutationResolvers = {
   createConversation: async (_, { userId }, { session, pubsub }) => {
     if (!session.user) throw new UnauthenticatedError();
 
-    const conversee = await db.query.users.findFirst({
-      where: ({ id }, { eq }) => eq(id, userId),
-    });
+    const [conversee] = await db.select().from(users).where(eq(users.id, userId));
     if (!conversee) {
       return {
         code: ResponseCode.NotFound,
@@ -140,9 +138,7 @@ const mutations: MutationResolvers = {
         };
       }
 
-      const conversation = await db.query.conversations.findFirst({
-        where: ({ id }, { eq }) => eq(id, conversationId),
-      });
+      const [conversation] = await db.select().from(conversations).where(eq(conversations.id, conversationId));
 
       return {
         code: ResponseCode.Ok,
@@ -177,9 +173,7 @@ const mutations: MutationResolvers = {
         };
       }
 
-      const conversation = await db.query.conversations.findFirst({
-        where: ({ id }, { eq }) => eq(id, conversationId),
-      });
+      const [conversation] = await db.select().from(conversations).where(eq(conversations.id, conversationId));
 
       return {
         code: ResponseCode.Ok,

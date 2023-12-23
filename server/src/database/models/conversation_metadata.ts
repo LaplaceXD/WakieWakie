@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { boolean, foreignKey, pgTable, primaryKey, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { conversations } from "./conversations";
@@ -28,18 +27,5 @@ export const conversationMetadata = pgTable(
     }),
   }),
 );
-
-export const usersRelations = relations(users, ({ many }) => ({
-  conversations: many(conversationMetadata),
-}));
-
-export const conversationsRelations = relations(conversations, ({ many }) => ({
-  conversationUsers: many(conversationMetadata),
-}));
-
-export const conversationUsersRelations = relations(conversationMetadata, ({ one }) => ({
-  users: one(users),
-  conversations: one(conversations),
-}));
 
 export type ConversationMetadataModel = typeof conversationMetadata.$inferSelect;

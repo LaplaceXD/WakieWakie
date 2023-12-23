@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { pgTable, primaryKey, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { routines } from "./routines";
@@ -19,18 +18,5 @@ export const completedRoutines = pgTable(
     pk: primaryKey({ columns: [table.routineId, table.completerId] }),
   }),
 );
-
-export const userCompletedRoutines = relations(users, ({ many }) => ({
-  completedRoutines: many(completedRoutines),
-}));
-
-export const routinesCompleted = relations(routines, ({ many }) => ({
-  completed: many(completedRoutines),
-}));
-
-export const completedRoutinesRelations = relations(users, ({ one }) => ({
-  routine: one(routines),
-  completer: one(users),
-}));
 
 export type CompletedRoutineModel = typeof completedRoutines.$inferSelect;

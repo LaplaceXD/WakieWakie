@@ -1,5 +1,6 @@
 import { Gender, Interest } from "@/__generated__/gql";
-import { db } from "@/database";
+import { auth, db } from "@/database";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 /**
@@ -24,10 +25,7 @@ export const userSchema = z.object({
     .trim()
     .email()
     .refine(async value => {
-      const result = await db.query.auth.findFirst({
-        where: ({ email }, { eq }) => eq(email, value),
-      });
-
+      const [result] = await db.select().from(auth).where(eq(auth.email, value));
       return !result;
     }, "Email is already in use."),
   username: z
@@ -36,10 +34,7 @@ export const userSchema = z.object({
     .max(24)
     .regex(/[A-Za-z0-9_]+/, "Username must only contain alphanumeric characters and underscores.")
     .refine(async value => {
-      const result = await db.query.auth.findFirst({
-        where: ({ username }, { eq }) => eq(username, value),
-      });
-
+      const [result] = await db.select().from(auth).where(eq(auth.username, value));
       return !result;
     }, "Username is already in use."),
   password: z

@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm";
 import { pgTable, text, time, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
@@ -13,13 +12,5 @@ export const routines = pgTable("routines", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at"),
 });
-
-export const userRoutines = relations(users, ({ many }) => ({
-  routines: many(routines),
-}));
-
-export const routineUser = relations(routines, ({ one }) => ({
-  user: one(users),
-}));
 
 export type RoutineModel = typeof routines.$inferSelect;
