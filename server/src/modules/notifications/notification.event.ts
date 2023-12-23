@@ -26,5 +26,5 @@ export async function publishNotification(
     .returning();
   if (!notification) throw new Error("An error occured when inserting notification.");
 
-  return pubsub.publish(Events.NewNotifications, { newNotification: notification });
+  return pubsub.publish(Events.Notification, { notification });
 }

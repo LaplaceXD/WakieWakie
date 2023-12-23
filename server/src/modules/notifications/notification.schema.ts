@@ -39,6 +39,6 @@ export const typeDefs = gql`
 
   type Subscription {
     "Subscribe to new notifications."
-    newNotification: Notification!
+    notification: Notification!
   }
 `;

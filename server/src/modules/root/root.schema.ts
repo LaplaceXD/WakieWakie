@@ -7,7 +7,7 @@ export const typeDefs = gql`
 
   "There are the possible events in the system."
   enum Events {
-    NEW_NOTIFICATIONS
+    NOTIFICATION
   }
 
   "These are the possible response codes returned from a response."
