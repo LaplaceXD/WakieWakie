@@ -8,7 +8,7 @@ const FormInput = forwardRef(({ label, type, options }, ref) => {
       <div>
         {type === "select" ? (
           <select ref={ref} className={`${style} h-fit py-2`}>
-            <option disabled value="" defaultValue selected>
+            <option value="" disabled>
               {label === "Gender" ? "Select your gender:" : "Who are you interested in?"}
             </option>
             {options.map((option, optionIndex) => (

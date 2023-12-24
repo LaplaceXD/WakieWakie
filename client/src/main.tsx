@@ -3,6 +3,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
+import { split, HttpLink } from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
 
 import Home from "@/pages/home";
 import Ping from "@/components/ping";
@@ -46,14 +50,35 @@ const router = createBrowserRouter([
   },
 ]);
 
-const link = createHttpLink({
+const httpLink = new HttpLink({
   uri: "http://localhost:4000/graphql",
   credentials: "include",
 });
 
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:4000/graphql",
+  }),
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return definition.kind === "OperationDefinition" && definition.operation === "subscription";
+  },
+  wsLink,
+  httpLink,
+);
+
 const client = new ApolloClient({
+  link: splitLink,
   cache: new InMemoryCache(),
-  link,
+  credentials: "include",
+  defaultOptions: {
+    watchQuery: {
+      nextFetchPolicy: "no-cache",
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

@@ -4,7 +4,7 @@ import TextDisplay from "@/components/common/text-display";
 import Buttons from "@/components/common/buttons";
 import AuthText from "@/components/common/auth-text";
 import FormInput from "@/components/common/form-input";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { LOGIN_USER } from "@/pages/login-action";
 import { camelCase } from "@/components/utils/index.js";
@@ -19,11 +19,17 @@ function Login() {
 
   const [loginuser] = useMutation(LOGIN_USER);
 
-  const { loading, error, data } = useQuery(CHECK_USER);
+  const { loading, error, data, refetch } = useQuery(CHECK_USER);
 
-  if (!error && !loading && data && data.me) {
-    navigate("/");
-  }
+  useEffect(() => {
+    refetch()
+      .then(() => {
+        if (!error && !loading && data && data.me) {
+          navigate("/");
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const formFields = [
     { label: "Username", type: "text" },
@@ -40,7 +46,6 @@ function Login() {
       })
     ) {
       toast.error("Please Input Credentials!");
-      return;
     }
 
     const { username, password } = _userDetails;
