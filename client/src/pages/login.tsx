@@ -29,7 +29,7 @@ function Login() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [error, loading, data, navigate, refetch]);
 
   const formFields = [
     { label: "Username", type: "text" },
