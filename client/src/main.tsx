@@ -11,7 +11,7 @@ import Messages from "@/pages/messages";
 import App from "./App.tsx";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
-
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   {
@@ -53,13 +53,14 @@ const link = createHttpLink({
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link
+  link,
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <RouterProvider router={router} />
+      <ToastContainer autoClose={3000} hideProgressBar={true} theme="colored" />
     </ApolloProvider>
   </React.StrictMode>,
 );

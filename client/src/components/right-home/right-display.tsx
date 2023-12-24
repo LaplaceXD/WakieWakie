@@ -1,11 +1,11 @@
 import TextDisplay from "@/components/common/text-display";
-import Carousel from "@/components/right-home/carousel";
+import UserCarousel from "@/components/right-home/user-carousel";
 
-function RightDisplay({ loading }) {
+function RightDisplay() {
   return (
     <>
-      <TextDisplay TitleLabel="It's time to Wakie Wakie!" TextLabel="You woke up with these people" style="mb-12" />
-      <Carousel loading={loading} />
+      <TextDisplay TitleLabel="It's time to Wakie Wakie!" TextLabel="You woke up with these people" style="mb-4" />
+      <UserCarousel />
     </>
   );
 }
